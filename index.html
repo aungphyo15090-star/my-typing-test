@@ -3,166 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aung Phyo Win - Myanmar Typing Master Pro</title>
+    <title>Aung Phyo Win - Typing Pro (Secure)</title>
     <link href="https://mmwebfonts.comquas.com/fonts/pyidaungsu.css" rel="stylesheet">
     <style>
-        :root { --bg: #eef2f7; --sidebar: #1e272e; --accent: #f39c12; --skin: #ffdbac; --white: #ffffff; }
-        body { font-family: 'Pyidaungsu', sans-serif; background: var(--bg); margin: 0; display: flex; height: 100vh; overflow: hidden; }
-
-        /* Sidebar */
-        .sidebar { width: 300px; background: var(--sidebar); color: white; display: flex; flex-direction: column; box-shadow: 4px 0 15px rgba(0,0,0,0.3); }
-        .sidebar-header { padding: 30px 20px; text-align: center; border-bottom: 1px solid #34495e; }
-        .user-name { font-size: 1.5rem; color: var(--accent); font-weight: bold; text-shadow: 0 0 10px rgba(243,156,18,0.5); animation: glow 2s infinite alternate; }
-        @keyframes glow { from { opacity: 0.8; } to { opacity: 1; text-shadow: 0 0 20px var(--accent); } }
+        :root { --main: #2c3e50; --gold: #f39c12; --bg: #f5f6fa; --white: #ffffff; }
+        body { font-family: 'Pyidaungsu', sans-serif; background: var(--bg); margin: 0; }
         
-        .lesson-container { flex: 1; overflow-y: auto; padding: 15px; }
-        .lesson-item { padding: 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; background: rgba(255,255,255,0.05); transition: 0.3s; font-size: 14px; border-left: 5px solid transparent; }
-        .lesson-item:hover { background: rgba(255,255,255,0.1); transform: translateX(5px); }
-        .lesson-item.active { background: var(--accent); color: black; font-weight: bold; border-left-color: #fff; }
+        /* Security Overlay */
+        #login-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background: var(--main); z-index: 9999; display: flex; align-items: center; justify-content: center; color: white; }
+        .login-box { text-align: center; background: #34495e; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .login-box input { padding: 10px; border-radius: 5px; border: none; margin-top: 10px; font-size: 18px; text-align: center; }
 
-        /* Main Content */
-        .main-content { flex: 1; display: flex; flex-direction: column; padding: 20px; overflow-y: auto; align-items: center; }
-        .app-card { background: var(--white); width: 100%; max-width: 1000px; padding: 25px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); }
-
-        /* Timer Control */
-        .controls { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: #f8f9fa; padding: 15px; border-radius: 12px; }
-        .timer-select select { padding: 8px; border-radius: 5px; border: 1px solid #ccc; font-family: 'Pyidaungsu'; }
-        .stat-box { font-weight: bold; color: var(--sidebar); font-size: 1.1rem; }
-
-        /* Text Display */
-        #display-text { font-size: 24px; line-height: 2; background: #fcfcfc; padding: 25px; border-radius: 15px; border: 1px solid #eee; margin-bottom: 20px; min-height: 150px; }
-        .correct { color: #2ecc71; }
-        .incorrect { background: #e74c3c; color: white; border-radius: 4px; }
-        .active-char { border-bottom: 4px solid var(--accent); background: rgba(243,156,18,0.1); }
-
-        input { width: 100%; padding: 15px; font-size: 22px; border: 2px solid #ddd; border-radius: 10px; outline: none; font-family: 'Pyidaungsu'; margin-bottom: 20px; }
-
-        /* Visual Keyboard (Computer Style) */
-        .keyboard { background: #2c3e50; padding: 15px; border-radius: 15px; width: 100%; box-shadow: 0 8px 0 #1a252f; }
-        .kb-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 6px; }
-        .key { background: #eee; color: #333; height: 45px; min-width: 45px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 6px; font-size: 14px; font-weight: bold; flex: 1; border-bottom: 3px solid #ccc; }
-        .key span.s-char { font-size: 11px; color: #7f8c8d; }
-        .key.active-kb { background: var(--accent); color: white; border-bottom: none; transform: translateY(2px); }
+        /* Sidebar & Layout */
+        .wrapper { display: flex; height: 100vh; overflow: hidden; }
+        .sidebar { width: 300px; background: var(--main); color: white; display: flex; flex-direction: column; }
+        .content { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; align-items: center; }
+        
+        /* Leaderboard */
+        .leaderboard { background: rgba(255,255,255,0.1); margin: 15px; padding: 15px; border-radius: 10px; flex-grow: 1; overflow-y: auto; }
+        .rank-item { display: flex; justify-content: space-between; padding: 8px; border-bottom: 1px solid #455a64; font-size: 14px; }
+        
+        /* Keyboard & UI */
+        .app-card { background: var(--white); width: 100%; max-width: 1000px; padding: 30px; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+        #display-text { font-size: 24px; line-height: 1.8; background: #fafafa; padding: 20px; border-radius: 10px; margin-bottom: 20px; min-height: 120px; }
+        .keyboard { background: #dcdde1; padding: 10px; border-radius: 10px; width: 100%; }
+        .kb-row { display: flex; justify-content: center; gap: 4px; margin-bottom: 5px; }
+        .key { background: white; min-width: 45px; height: 50px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-bottom: 3px solid #bcbcbc; font-size: 13px; flex: 1; position: relative; }
+        .key.active { background: var(--gold); color: white; transform: translateY(2px); border-bottom: none; }
+        .key .en { position: absolute; top: 2px; left: 4px; font-size: 9px; color: #999; }
         .key.space { flex: 8; }
-        .key.shift-key { flex: 2; background: #95a5a6; color: white; }
-
-        /* Hands */
-        .hands-area { display: flex; justify-content: center; gap: 60px; margin-bottom: 10px; }
-        .hand-svg { width: 130px; height: auto; }
-        .finger { fill: var(--skin); stroke: #c69c6d; stroke-width: 1.5; transition: 0.1s; transform-origin: center bottom; }
-        .active-finger { fill: var(--accent) !important; transform: translateY(-10px); }
+        
+        .char-next { border-bottom: 3px solid var(--gold); background: #fffbe6; }
+        .char-correct { color: #2ecc71; }
+        .char-wrong { background: #e74c3c; color: white; }
     </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <div class="sidebar-header">
-        <div class="user-name">Aung Phyo Win</div>
-        <div style="font-size: 0.8rem; margin-top: 5px; opacity: 0.7;">Myanmar Typing Master</div>
+<div id="login-overlay">
+    <div class="login-box">
+        <h2>🔒 Security Lock</h2>
+        <p>Aung Phyo Win ၏ ကိုယ်ပိုင် Website ဖြစ်ပါသည်</p>
+        <input type="password" id="access-code" placeholder="Enter Access Code">
+        <button onclick="checkAccess()" style="margin-top:10px; padding:10px 20px; cursor:pointer;">ဝင်မည်</button>
+        <p id="login-msg" style="color: #e74c3c; margin-top:10px;"></p>
     </div>
-    <div class="lesson-container" id="lesson-list"></div>
 </div>
 
-<div class="main-content">
-    <div class="app-card">
-        <div class="controls">
-            <div class="timer-select">
-                အချိန်ရွေးရန်: 
-                <select id="timer-setting">
-                    <option value="60">60 Seconds</option>
-                    <option value="120">120 Seconds</option>
-                </select>
-            </div>
-            <div class="stat-box">Time Left: <span id="time-display">60</span>s</div>
-            <div class="stat-box">WPM: <span id="wpm-display">0</span></div>
+<div class="wrapper">
+    <div class="sidebar">
+        <div style="padding: 20px; text-align: center; border-bottom: 1px solid #444;">
+            <h3 style="color:var(--gold);">AUNG PHYO WIN</h3>
+            <p style="font-size: 12px;">Typing Master Pro</p>
         </div>
-
-        <div id="display-text"></div>
-        <input type="text" id="input-field" placeholder="စာရိုက်ခြင်းကို စတင်လိုက်ပါ..." autocomplete="off">
-
-        <div class="hands-area">
-            <svg class="hand-svg" viewBox="0 0 200 200"><path id="L5" class="finger" d="M30,120 Q30,60 50,60 L60,60 Q80,60 80,120 Z" /><path id="L4" class="finger" d="M60,110 Q60,40 80,40 L90,40 Q110,40 110,110 Z" /><path id="L3" class="finger" d="M95,100 Q95,30 115,30 L125,30 Q145,30 145,100 Z" /><path id="L2" class="finger" d="M130,110 Q130,50 150,50 L160,50 Q180,50 180,110 Z" /><path id="L1" class="finger" d="M160,150 Q195,150 195,185 L175,205 Q140,205 140,170 Z" /></svg>
-            <svg class="hand-svg" viewBox="0 0 200 200"><path id="R1" class="finger" d="M40,150 Q5,150 5,185 L25,205 Q60,205 60,170 Z" /><path id="R2" class="finger" d="M20,110 Q20,50 40,50 L50,50 Q70,50 70,110 Z" /><path id="R3" class="finger" d="M55,100 Q55,30 75,30 L85,30 Q105,30 105,100 Z" /><path id="R4" class="finger" d="M90,110 Q90,40 110,40 L120,40 Q140,40 140,110 Z" /><path id="R5" class="finger" d="M120,120 Q120,60 140,60 L150,60 Q170,60 170,120 Z" /></svg>
-        </div>
-
-        <div class="keyboard" id="kb-ui"></div>
         
-        <div style="text-align: center; margin-top: 20px; color: #888; font-size: 12px;">
-            Created by Aung Phyo Win &copy; 2024
+        <div class="leaderboard">
+            <h4 style="text-align:center;">🏆 Leaderboard</h4>
+            <div id="rank-list">
+                </div>
+        </div>
+    </div>
+
+    <div class="content">
+        <div class="app-card">
+            <div style="display:flex; justify-content: space-between; margin-bottom: 15px;">
+                <div>အချိန်: <span id="timer">60</span>s</div>
+                <div>အမြန်နှုန်း: <span id="wpm">0</span> WPM</div>
+                <button onclick="resetTest()">ပြန်စမည်</button>
+            </div>
+
+            <div id="display-text"></div>
+            <input type="text" id="typing-input" placeholder="ဒီမှာ စတင်ရိုက်ပါ..." autocomplete="off">
+
+            <div class="keyboard" id="kb-ui">
+                </div>
         </div>
     </div>
 </div>
 
 <script>
+    const MY_CODE = "1234"; // ဝင်ရောက်ရန် လျှို့ဝှက်နံပါတ်
+    let leaderboardData = JSON.parse(localStorage.getItem('typing_ranks')) || [];
+
+    function checkAccess() {
+        const input = document.getElementById('access-code').value;
+        if(input === MY_CODE) {
+            document.getElementById('login-overlay').style.display = 'none';
+            initApp();
+        } else {
+            document.getElementById('login-msg').innerText = "Access Code မှားယွင်းနေပါသည်။";
+        }
+    }
+
     const lessons = [
-        { title: "ကကြီး - အခန်း", text: "ကကြီး ကလေး ငို၊ ကိုကို ချော့လို့ နို့စို့စို့။ ကကြီးသည် ဗျည်းအက္ခရာများတွင် ပထမဆုံး အက္ခရာဖြစ်ပြီး ကလေးငယ်များအတွက် အလွန် ရင်းနှီးသော စာလုံးဖြစ်သည်။" },
-        { title: "ခကွေး - အခန်း", text: "ခကွေး ကွေးကွေး၊ ခွေးကလေးကို ကျွေးကျွေး။ ခကွေး အက္ခရာကို ရေးသားရာတွင် ဝိုင်းဝန်းသော ပုံစံဖြင့် ရေးသားရပြီး စာလုံးအလှ ရေးရာတွင် အခြေခံကျပါသည်။" },
-        { title: "ဂငယ် - အခန်း", text: "ဂငယ် ငယ်ငယ်၊ ငါးကလေး ဖမ်းမယ်။ ဂငယ်သည် ရေးသားရ လွယ်ကူသော အက္ခရာဖြစ်ပြီး စကားလုံး အများအပြားတွင် ပါဝင်နေပါသည်။" },
-        { title: "ဃကြီး - အခန်း", text: "ဃကြီး ကြီးမား၊ ဆင်ကြီးသွား။ ဃကြီးကို ရေးသားရာတွင် Shift key ကို အသုံးပြုရမည်ဖြစ်ပြီး စာလုံးအဆင့်မြင့် လေ့ကျင့်မှုအတွက် အရေးပါသည်။" },
-        { title: "င - အခန်း", text: "င ကလေး ငြိမ်ငြိမ်၊ အိမ်မှာထိုင်။ ငါး၊ ငှက်၊ ငွေ စသော စကားလုံးများကို ရေးသားရာတွင် င အက္ခရာကို အသုံးပြုရပါသည်။" },
-        { title: "ဗျည်းအစုံ (က မှ အ)", text: "က ခ ဂ ဃ င စ ဆ ဇ ဈ ည ဋ ဌ ဍ ဎ ဏ တ ထ ဒ ဓ န ပ ဖ ဗ ဘ မ ယ ရ လ ဝ သ ဟ ဠ အ" }
+        "ကကြီး ကလေး ငို၊ ကိုကို ချော့လို့ နို့စို့စို့။ ကကြီးသည် မြန်မာဗျည်းများတွင် ပထမဆုံး အက္ခရာ ဖြစ်သည်။",
+        "ခကွေး ကွေးကွေး၊ ခွေးကလေးကို ကျွေးကျွေး။ ခကွေးကို အကွေ့အဝိုင်းပုံစံဖြင့် ရေးသားရသည်။",
+        "က ခ ဂ ဃ င စ ဆ ဇ ဈ ည ဋ ဌ ဍ ဎ ဏ တ ထ ဒ ဓ န ပ ဖ ဗ ဘ မ ယ ရ လ ဝ သ ဟ ဠ အ"
     ];
 
-    const keyboardLayout = [
-        ['ဆ','တ','န','မ','အ','ပ','က','င','သ','စ'],
-        ['ေ','ှ','ိ','်','ါ','့','ြ','ု','ူ','း'],
-        ['ဖ','ထ','ခ','လ','ဘ','ည','ာ','ယ','ဝ','၏']
-    ];
-    const shiftLayout = [
-        ['ဍ','ဋ','ဏ','ဣ','ဤ','ဥ','ဦ','ဧ','သြ','၌'],
-        ['ဗ','ှ','ီ','်','ာ','့','ွ','ူ','ူး','၏'],
-        ['ဃ','ဌ','ခြ','ဠ','ဘ','ည','ါ','၌','၎','၏']
-    ];
+    const keysRow1 = [["Q","ဆ"],["W","တ"],["E","န"],["R","မ"],["T","အ"],["Y","ပ"],["U","က"],["I","င"],["O","သ"],["P","စ"]];
+    const keysRow2 = [["A","ေ"],["S","ှ"],["D","ိ"],["F","်"],["G","ါ"],["H","့"],["J","ြ"],["K","ု"],["L","ူ"]];
+    const keysRow3 = [["Z","ဖ"],["X","ထ"],["C","ခ"],["V","လ"],["B","ဘ"],["N","ည"],["M","ာ"]];
 
-    const fingerMap = {
-        'ဆ':'L5','ေ':'L5','ဖ':'L5','ဍ':'L5','ဗ':'L5','ဃ':'L5',
-        'တ':'L4','ှ':'L4','ထ':'L4','ဋ':'L4','ဌ':'L4',
-        'န':'L3','ိ':'L3','ခ':'L3','ဏ':'L3','ီ':'L3',
-        'မ':'L2','အ':'L2','်':'L2','ါ':'L2','လ':'L2','ဘ':'L2','ဣ':'L2','ဤ':'L2','ဠ':'L2',
-        'ပ':'R2','က':'R2','့':'R2','ြ':'R2','ည':'R2','ာ':'R2','ဥ':'R2','ဦ':'R2','ွ':'R2',
-        'င':'R3','ု':'R3','ယ':'R3','ဧ':'R3','ူ':'R3',
-        'သ':'R4','ူ':'R4','ဝ':'R4','သြ':'R4','၎':'R4',
-        'စ':'R5','း':'R5','၏':'R5','၌':'R5',' ':'R1'
-    };
+    let timer, timeLeft = 60, isRunning = false, currentText = "", charIdx = 0;
 
-    let timer, timeLeft, isRunning = false, currentIndex = 0;
+    function initApp() {
+        buildKeyboard();
+        updateLeaderboard();
+        loadLesson();
+    }
 
-    function createKeyboard() {
+    function buildKeyboard() {
         const kb = document.getElementById('kb-ui');
-        kb.innerHTML = '';
-        keyboardLayout.forEach((row, rIdx) => {
+        const rows = [keysRow1, keysRow2, keysRow3];
+        rows.forEach(row => {
             const rowDiv = document.createElement('div');
             rowDiv.className = 'kb-row';
-            row.forEach((key, kIdx) => {
-                const keyDiv = document.createElement('div');
-                keyDiv.className = 'key';
-                keyDiv.dataset.char = key;
-                keyDiv.dataset.shift = shiftLayout[rIdx][kIdx];
-                keyDiv.innerHTML = `<span class="s-char">${shiftLayout[rIdx][kIdx]}</span><span>${key}</span>`;
-                rowDiv.appendChild(keyDiv);
+            row.forEach(k => {
+                rowDiv.innerHTML += `<div class="key" data-mm="${k[1]}"><span class="en">${k[0]}</span>${k[1]}</div>`;
             });
             kb.appendChild(rowDiv);
         });
-        kb.innerHTML += `<div class="kb-row"><div class="key shift-key" id="key-shift">Shift</div><div class="key space" data-char=" ">Space</div></div>`;
+        kb.innerHTML += `<div class="kb-row"><div class="key space" data-mm=" ">Space</div></div>`;
     }
 
-    function loadLesson(idx) {
-        currentIndex = idx;
-        const lesson = lessons[idx];
-        document.getElementById('display-text').innerHTML = lesson.text.split('').map((c, i) => `<span class="${i===0?'active-char':''}">${c}</span>`).join('');
-        document.getElementById('input-field').value = '';
-        renderSidebar();
-        resetTimer();
-        updateVisuals(lesson.text[0]);
+    function loadLesson() {
+        currentText = lessons[Math.floor(Math.random() * lessons.length)];
+        document.getElementById('display-text').innerHTML = currentText.split('').map((c, i) => 
+            `<span class="${i===0?'char-next':''}">${c}</span>`
+        ).join('');
+        charIdx = 0;
+        document.getElementById('typing-input').value = "";
     }
 
-    function resetTimer() {
-        clearInterval(timer);
-        isRunning = false;
-        timeLeft = parseInt(document.getElementById('timer-setting').value);
-        document.getElementById('time-display').innerText = timeLeft;
+    document.getElementById('typing-input').addEventListener('input', (e) => {
+        if(!isRunning) startTimer();
+        
+        const val = e.target.value;
+        const spans = document.getElementById('display-text').querySelectorAll('span');
+        
+        spans.forEach((s, i) => {
+            s.className = '';
+            if(val[i] == null) {
+                if(i === val.length) s.className = 'char-next';
+            } else if(val[i] === s.innerText) {
+                s.className = 'char-correct';
+            } else {
+                s.className = 'char-wrong';
+            }
+        });
+
+        const nextChar = currentText[val.length];
+        highlightKey(nextChar);
+
+        if(val.length >= currentText.length) {
+            saveScore();
+            loadLesson();
+        }
+    });
+
+    function highlightKey(char) {
+        document.querySelectorAll('.key').forEach(k => k.classList.remove('active'));
+        const target = document.querySelector(`.key[data-mm="${char}"]`);
+        if(target) target.classList.add('active');
     }
 
     function startTimer() {
         isRunning = true;
         timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timer').innerText = timeLeft;
+            if(timeLeft <= 0) {
+                clearInterval(timer);
+                saveScore();
+                alert("Time is up!");
+                resetTest();
+            }
+        }, 1000);
+    }
+
+    function saveScore() {
+        const wpm = Math.round((document.getElementById('typing-input').value.length / 5));
+        const userName = prompt("သင့်နာမည်ကို ရိုက်ထည့်ပါ -");
+        if(userName) {
+            leaderboardData.push({ name: userName, speed: wpm });
+            leaderboardData.sort((a,b) => b.speed - a.speed);
+            localStorage.setItem('typing_ranks', JSON.stringify(leaderboardData.slice(0, 10)));
+            updateLeaderboard();
+        }
+    }
+
+    function updateLeaderboard() {
+        const list = document.getElementById('rank-list');
+        list.innerHTML = leaderboardData.map((d, i) => `
+            <div class="rank-item">
+                <span>${i+1}. ${d.name}</span>
+                <b>${d.speed} WPM</b>
+            </div>
+        `).join('');
+    }
+
+    function resetTest() {
+        clearInterval(timer);
+        timeLeft = 60;
+        isRunning = false;
+        document.getElementById('timer').innerText = timeLeft;
+        loadLesson();
+    }
+</script>
+</body>
+</html>
