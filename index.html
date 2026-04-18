@@ -3,199 +3,201 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Myanmar Typing Ultimate Pro - 150 Lessons</title>
+    <title>Myanmar Typing Pro 150 - Aung Phyo Win</title>
     <link href="https://mmwebfonts.comquas.com/fonts/pyidaungsu.css" rel="stylesheet">
     <style>
-        :root { --main: #1e272e; --accent: #ffa801; --bg: #f1f2f6; --white: #ffffff; --correct: #05c46b; --wrong: #ff3f34; }
+        :root { --main: #1a1a2e; --accent: #f39c12; --bg: #f0f2f5; --white: #ffffff; }
         body { font-family: 'Pyidaungsu', sans-serif; background: var(--bg); margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        
+
+        /* Password Overlay */
+        #auth-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--main); z-index: 9999; display: flex; justify-content: center; align-items: center; color: white; }
+        .auth-box { text-align: center; background: #16213e; padding: 40px; border-radius: 20px; border: 2px solid var(--accent); }
+        .auth-box input { padding: 10px; font-size: 18px; border-radius: 5px; border: none; margin-top: 15px; text-align: center; }
+
         /* Sidebar */
-        .sidebar { width: 380px; background: var(--main); color: white; display: flex; flex-direction: column; box-shadow: 4px 0 15px rgba(0,0,0,0.3); }
-        .sidebar-header { padding: 30px; background: #161d23; border-bottom: 4px solid var(--accent); text-align: center; }
-        .sidebar-header h2 { margin: 0; font-size: 22px; color: var(--accent); letter-spacing: 1px; }
-        
-        .lesson-container { flex: 1; overflow-y: auto; padding: 15px; }
-        .grp-tag { font-size: 12px; color: #808e9b; padding: 20px 10px 8px; text-transform: uppercase; border-bottom: 1px solid #3d4852; display: block; margin-bottom: 10px; }
-        .lesson-btn { width: 100%; padding: 14px; margin-bottom: 6px; background: rgba(255,255,255,0.06); border: none; color: #d2dae2; border-radius: 8px; cursor: pointer; text-align: left; font-size: 14px; transition: 0.3s; }
-        .lesson-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
-        .lesson-btn.active { background: var(--accent); color: #000; font-weight: bold; transform: scale(1.02); }
+        .sidebar { width: 350px; background: var(--main); color: white; display: flex; flex-direction: column; box-shadow: 2px 0 10px rgba(0,0,0,0.2); }
+        .sidebar-header { padding: 20px; background: #16213e; border-bottom: 3px solid var(--accent); text-align: center; }
+        .lesson-list { flex: 1; overflow-y: auto; padding: 10px; }
+        .lesson-btn { width: 100%; padding: 12px; margin-bottom: 5px; background: rgba(255,255,255,0.05); border: none; color: #ddd; border-radius: 6px; cursor: pointer; text-align: left; font-size: 13px; }
+        .lesson-btn.active { background: var(--accent); color: white; font-weight: bold; }
+        .grp-title { font-size: 11px; color: #888; padding: 15px 5px 5px; text-transform: uppercase; border-bottom: 1px solid #333; display: block; }
 
-        /* Main Content */
-        .main { flex: 1; padding: 40px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
-        .typing-card { background: var(--white); width: 100%; max-width: 1100px; padding: 45px; border-radius: 30px; box-shadow: 0 20px 60px rgba(0,0,0,0.1); }
+        /* Content Area */
+        .main { flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
+        .card { background: var(--white); width: 100%; max-width: 1000px; padding: 30px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); }
         
-        .stats { display: flex; justify-content: space-between; margin-bottom: 25px; padding: 0 10px; }
-        .stat-item { font-size: 18px; font-weight: bold; color: #485460; }
-        
-        #text-box { font-size: 26px; line-height: 2.2; padding: 35px; background: #fafafa; border: 2px solid #efefef; border-radius: 20px; margin-bottom: 30px; text-align: justify; color: #2f3542; min-height: 350px; position: relative; }
-        
-        .next-char { border-bottom: 5px solid var(--accent); background: #fff4cc; }
-        .correct-char { color: var(--correct); }
-        .wrong-char { background: var(--wrong); color: white; border-radius: 5px; }
+        #display { font-size: 24px; line-height: 2.2; padding: 25px; background: #fcfcfc; border: 1px solid #eee; border-radius: 12px; margin-bottom: 15px; text-align: justify; color: #333; min-height: 300px; }
+        .next { border-bottom: 4px solid var(--accent); background: #fff9e6; }
+        .ok { color: #27ae60; }
+        .error { background: #e74c3c; color: white; border-radius: 4px; }
 
-        input { width: 100%; padding: 22px; font-size: 26px; border: 3px solid #dcdde1; border-radius: 18px; outline: none; transition: 0.3s; font-family: 'Pyidaungsu'; }
-        input:focus { border-color: var(--accent); box-shadow: 0 0 20px rgba(255, 168, 1, 0.2); }
+        input#input { width: 100%; padding: 15px; font-size: 22px; border: 2px solid #ddd; border-radius: 10px; outline: none; margin-bottom: 15px; font-family: 'Pyidaungsu'; }
 
-        /* Finger & Hand Logic */
-        .hands-view { display: flex; justify-content: center; gap: 120px; margin-top: 35px; margin-bottom: 20px; }
-        .hand { position: relative; width: 200px; height: 140px; opacity: 0.8; }
-        .finger { position: absolute; width: 34px; height: 48px; background: #ffe0bd; border-radius: 18px 18px 6px 6px; border: 1px solid #c8a165; transition: 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-        .finger.active { background: var(--accent); transform: translateY(-12px); box-shadow: 0 10px 25px rgba(255, 168, 1, 0.5); border-color: white; z-index: 10; }
-        
-        /* Finger Positions (Image 9 Reference) */
-        #L5 { left: 0; top: 45px; } #L4 { left: 40px; top: 18px; } #L3 { left: 80px; top: 5px; } #L2 { left: 120px; top: 18px; } #L1 { left: 160px; top: 90px; width: 45px; border-radius: 20px; }
-        #R1 { right: 160px; top: 90px; width: 45px; border-radius: 20px; } #R2 { right: 120px; top: 18px; } #R3 { right: 80px; top: 5px; } #R4 { right: 40px; top: 18px; } #R5 { right: 0; top: 45px; }
+        /* Hands */
+        .hands { display: flex; justify-content: center; gap: 80px; margin-bottom: 15px; }
+        .hand { position: relative; width: 160px; height: 100px; }
+        .finger { position: absolute; width: 28px; height: 40px; background: #ffe0bd; border-radius: 12px 12px 4px 4px; border: 1px solid #c8a165; transition: 0.1s; }
+        .finger.active { background: var(--accent); transform: translateY(-5px); box-shadow: 0 4px 10px rgba(243, 156, 18, 0.4); }
+        #L5{left:0;top:35px} #L4{left:32px;top:10px} #L3{left:64px;top:0} #L2{left:96px;top:10px} #L1{left:128px;top:70px;width:35px;border-radius:15px}
+        #R1{right:128px;top:70px;width:35px;border-radius:15px} #R2{right:96px;top:10px} #R3{right:64px;top:0} #R4{right:32px;top:10px} #R5{right:0;top:35px}
 
-        /* Customer Service */
-        .service-footer { margin-top: 40px; padding: 20px; background: #f8f9fa; border-radius: 15px; text-align: center; border: 2px dashed #dcdde1; width: 100%; }
-        .service-footer a { color: #341f97; text-decoration: none; font-weight: bold; font-size: 17px; }
+        /* Keyboard */
+        .kb { background: #2c3e50; padding: 12px; border-radius: 12px; width: 100%; }
+        .row { display: flex; justify-content: center; gap: 4px; margin-bottom: 5px; }
+        .key { background: white; min-width: 42px; height: 48px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; border-bottom: 3px solid #bdc3c7; flex: 1; position: relative; }
+        .key.active { background: var(--accent); color: white; border-bottom: none; transform: translateY(2px); }
+        .key .sh { position: absolute; top: 2px; left: 4px; font-size: 9px; color: #aaa; }
+        .key.space { flex: 7; }
+
+        .service { margin-top: 20px; text-align: center; font-size: 14px; color: #666; }
+        .service a { color: #2980b9; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
 
+<div id="auth-overlay">
+    <div class="auth-box">
+        <h2>AUNG PHYO WIN Typing Master</h2>
+        <p>ဝင်ရောက်ရန် Password ရိုက်ထည့်ပါ</p>
+        <input type="password" id="pass-input" placeholder="Password">
+        <br><br>
+        <button onclick="checkPass()" style="padding: 10px 30px; background: var(--accent); border: none; border-radius: 5px; cursor: pointer; color: white; font-weight: bold;">Enter</button>
+    </div>
+</div>
+
 <div class="sidebar">
     <div class="sidebar-header">
-        <h2>AUNG PHYO WIN</h2>
-        <div style="font-size: 12px; color: #aaa;">TYPING MASTER PRO - 150 LEVELS</div>
+        <strong style="color:var(--accent); font-size: 18px;">AUNG PHYO WIN</strong><br>
+        <small>Master Key Edition</small>
     </div>
-    <div class="lesson-container" id="nav-list"></div>
+    <div class="lesson-list" id="lesson-nav"></div>
 </div>
 
 <div class="main">
-    <div class="typing-card">
-        <div class="stats">
-            <div class="stat-item" id="cur-lesson-name">အခန်း ၁</div>
-            <div class="stat-item">အမြန်နှုန်း: <span id="wpm-tag" style="color:var(--accent)">0</span> WPM</div>
+    <div class="card">
+        <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-size:14px; font-weight:bold;">
+            <span id="title">အခန်း ၁</span>
+            <span>Speed: <span id="wpm">0</span> WPM</span>
+        </div>
+        <div id="display"></div>
+        <input type="text" id="input" placeholder="စာသားများကို စတင်ရိုက်နှိပ်ပါ..." autocomplete="off">
+
+        <div class="hands">
+            <div class="hand"><div id="L5" class="finger"></div><div id="L4" class="finger"></div><div id="L3" class="finger"></div><div id="L2" class="finger"></div><div id="L1" class="finger"></div></div>
+            <div class="hand"><div id="R1" class="finger"></div><div id="R2" class="finger"></div><div id="R3" class="finger"></div><div id="R4" class="finger"></div><div id="R5" class="finger"></div></div>
         </div>
 
-        <div id="text-box"></div>
-        <input type="text" id="input-field" placeholder="ဤနေရာတွင် စာသားကို ရိုက်နှိပ်ပါ..." autocomplete="off">
+        <div class="kb" id="kb-ui"></div>
 
-        <div class="hands-view">
-            <div class="hand">
-                <div id="L5" class="finger"></div><div id="L4" class="finger"></div>
-                <div id="L3" class="finger"></div><div id="L2" class="finger"></div>
-                <div id="L1" class="finger"></div>
-            </div>
-            <div class="hand">
-                <div id="R1" class="finger"></div><div id="R2" class="finger"></div>
-                <div id="R3" class="finger"></div><div id="R4" class="finger"></div>
-                <div id="R5" class="finger"></div>
-            </div>
-        </div>
-
-        <div class="service-footer">
-            👩‍💻 ဖောက်သည်ဝန်ဆောင်မှု (Help Desk) - 
-            <a href="mailto:aungphyo52967@gmail.com">aungphyo52967@gmail.com</a>
+        <div class="service">
+            Customer Service Support: <a href="mailto:aungphyo52967@gmail.com">aungphyo52967@gmail.com</a>
         </div>
     </div>
 </div>
 
 <script>
-    const allData = [];
-
-    // ၁ မှ ၃၃: ဗျည်း (က မှ အ) - အကျယ်ဆုံး စာသားများ
-    const consonants = [
-        { c: "က", p: "ကကြီး ကလေး ငို၊ ကိုကို ချော့လို့ နို့စို့စို့။ ကကြီးသည် မြန်မာဗျည်းအက္ခရာများတွင် ပထမဆုံးသော ဗျည်းဖြစ်ပြီး ကလေးငယ်များ စာစတင်သင်ကြားရာတွင် အခြေခံအကျဆုံး ဖြစ်ပါသည်။ ဤဗျည်းကို ရေးသားရာတွင် စက်ဝိုင်းပုံသဏ္ဌာန် ပြည့်စုံရန် လိုအပ်ပြီး စာလုံးအလှ ရေးသားခြင်း အတတ်ပညာတွင် အခြေခံ အကျဆုံး စာလုံးအဖြစ် သတ်မှတ်ထားပါသည်။" },
-        { c: "ခ", p: "ခကွေး ကွေးကွေး၊ ခွေးကလေးကို ကျွေးကျွေး။ ခကွေး အက္ခရာသည် မြန်မာစာလုံးများ၏ အကွေ့အဝိုက် အလှတရားကို ဖော်ဆောင်ပေးပြီး ရေးသားရာတွင် စနစ်တကျ ရှိရန် လိုအပ်ပါသည်။ ခကွေးကို လက်ကွက်တွင် ရိုက်နှိပ်သည့်အခါ လက်ခလယ်ကို အသုံးပြုရမည် ဖြစ်ပါသည်။" },
-        { c: "ဂ", p: "ဂငယ် ငယ်ငယ်၊ ငါးကလေး ဖမ်းမယ်။ ဂငယ်သည် အရွယ်အစား သေးငယ်သည်ဟု ဆိုလိုသော်လည်း ပါဠိသက် စကားလုံးများတွင် အလွန် အသုံးဝင်ပါသည်။ ဂင်္ဂါ၊ ဂုဏ်ကျေးဇူး စသော စကားလုံးများတွင် ပါဝင်ပါသည်။" },
-        { c: "ဃ", p: "ဃကြီး ကြီးမား၊ ဆင်ကြီး သွား။ ဃကြီး အက္ခရာသည် ရေးသားရာတွင် လက်ဝင်ပြီး Shift key ကို အသုံးပြုကာ ရိုက်နှိပ်ရသော ဗျည်းဖြစ်သည်။ ဗုဒ္ဓဘာသာ စာပေများတွင် တွေ့ရများပါသည်။" },
-        { c: "င", p: "င ကလေး ငြိမ်ငြိမ်၊ အိမ်မှာ ထိုင်။ င အက္ခရာသည် မြန်မာစကား၏ အခြေခံကျသော အသုံးအနှုန်းများ ဖြစ်သည့် ငါး၊ ငှက်၊ ငွေ၊ ငြိမ်းချမ်းရေး စသော စကားလုံးများတွင် အခြေခံ အုတ်မြစ် ဖြစ်ပါသည်။" },
-        // ... (၃၃ လုံးအထိ logic ထဲမှာ loop ပတ်ပေးပါမယ်)
-    ];
-
-    for(let i=0; i<33; i++) {
-        let base = consonants[i] || { c: "ဗျည်း", p: "မြန်မာစာပေ၏ အခြေခံဗျည်းများကို မှန်ကန်စွာ ရိုက်နှိပ်နိုင်ခြင်းသည် ကွန်ပျူတာ အသုံးပြုသူတိုင်းအတွက် မရှိမဖြစ် လိုအပ်သော ကျွမ်းကျင်မှု ဖြစ်ပါသည်။" };
-        allData.push({ title: `အခန်း ${i+1}: ဗျည်း (${base.c})`, text: base.p + " ဤစာပိုဒ်ကို ရိုက်နှိပ်ခြင်းဖြင့် သင်၏ လက်ချောင်းများ ကျွမ်းကျင်မှုကို မြှင့်တင်နိုင်မည် ဖြစ်ပါသည်။" });
-    }
-
-    // ၃၄ မှ ၇၀: မြန်မာ့သမိုင်း (အလွန်ရှည်သော စာပိုဒ်များ)
-    const historyPool = [
-        "ပုဂံခေတ်သည် မြန်မာ့သမိုင်းတွင် ပထမဆုံးသော အင်ပါယာဖြစ်ပြီး အေဒီ ၁၀၄၄ ခုနှစ်တွင် အနော်ရထာမင်းကြီးက စတင်တည်ထောင်ခဲ့သည်။ ပုဂံခေတ်တွင် ထေရဝါဒ ဗုဒ္ဓဘာသာသည် အထွန်းကားဆုံး ဖြစ်ခဲ့ပြီး ဘုရားပုထိုးပေါင်း ထောင်ချီ၍ တည်ထားခဲ့ကြပါသည်။ ထိုခေတ်၏ အနုပညာနှင့် ဗိသုကာ လက်ရာများသည် ယနေ့တိုင် ကမ္ဘာ့အမွေအနှစ်အဖြစ် တည်ရှိနေပါသည်။ မြန်မာစာပေနှင့် ယဉ်ကျေးမှုတို့သည် ပုဂံခေတ်တွင် အခြေတည်ခဲ့ခြင်း ဖြစ်ပါသည်။",
-        "အင်းဝခေတ်သည် မြန်မာ့စာပေ၏ ရွှေခေတ်ဟု ခေါ်ဆိုနိုင်ပါသည်။ စတုရင်္ဂဗလ အမတ်ကြီးနှင့် ရှင်မဟာရဋ္ဌသာရ စသော စာဆိုကျော်များစွာ ပေါ်ထွန်းခဲ့ပြီး ပျို့၊ ကဗျာ၊ လင်္ကာများ အလွန်တိုးတက်ခဲ့ပါသည်။ တိုင်းပြည်၏ နိုင်ငံရေးနှင့် စစ်ရေးကဏ္ဍတွင်လည်း အင်းဝခေတ်သည် အရေးပါသော အခန်းကဏ္ဍမှ ပါဝင်ခဲ့ပါသည်။",
-        "ကုန်းဘောင်ခေတ်သည် မြန်မာ့နောက်ဆုံး မင်းဆက်ဖြစ်ပြီး ၁၇၅၂ ခုနှစ်တွင် အလောင်းမင်းတရားကြီးက စတင်တည်ထောင်ခဲ့သည်။ ကုန်းဘောင်မင်းဆက်တွင် ထင်ရှားသော မင်းများစွာ ပေါ်ထွန်းခဲ့ပြီး နယ်ချဲ့အင်္ဂလိပ်တို့နှင့် စစ်ပွဲသုံးကြိမ် ဖြစ်ပွားခဲ့ကာ နောက်ဆုံးတွင် တစ်နိုင်ငံလုံး သူ့ကျွန်ဘဝသို့ ရောက်ရှိခဲ့ရပါသည်။"
-    ];
-    for(let i=33; i<70; i++) {
-        allData.push({ title: `အခန်း ${i+1}: မြန်မာ့သမိုင်းကြောင်း`, text: historyPool[i % 3] + " သမိုင်းကို သိခြင်းသည် မျိုးချစ်စိတ်ဓာတ်ကို ရှင်သန်စေပါသည်။" });
-    }
-
-    // ၇၁ မှ ၁၁၀: မြန်မာပြည်မှ မြို့ပြများ (အရှည်ကြီး)
-    const cityPool = [
-        "ရန်ကုန်မြို့သည် မြန်မာနိုင်ငံ၏ စီးပွားရေး မြို့တော်ဖြစ်ပြီး လူဦးရေ အထူထပ်ဆုံးသော မြို့ကြီး ဖြစ်ပါသည်။ ရွှေတိဂုံစေတီတော်မြတ်ကြီးမှာ ရန်ကုန်မြို့၏ ဂုဏ်ဆောင် သင်္ကေတဖြစ်ပြီး ကမ္ဘာတစ်ဝန်းမှ ခရီးသွားများစွာ လာရောက် လည်ပတ်ကြပါသည်။ ဆိပ်ကမ်းများ၊ စက်မှုဇုန်များနှင့် ရုံးစိုက်ရာ နေရာများစွာ တည်ရှိသဖြင့် အလုပ်အကိုင် အခွင့်အလမ်း ပေါများသော မြို့ ဖြစ်ပါသည်။",
-        "မန္တလေးမြို့သည် မြန်မာ့ယဉ်ကျေးမှု၏ ဗဟိုချက်မ ဖြစ်ပါသည်။ ကုန်းဘောင်မင်းဆက်၏ နောက်ဆုံး နန်းစိုက်ရာ မြို့တော်ဖြစ်သည့်အပြင် ရှေးဟောင်း လက်မှုပညာများနှင့် အနုပညာများ ထွန်းကားသော မြို့ဖြစ်ပါသည်။ မန္တလေးတောင်၊ ကျောက်တော်ကြီးဘုရားနှင့် ဦးပိန်တံတားတို့မှာ ထင်ရှားလှပါသည်။",
-        "နေပြည်တော်သည် မြန်မာနိုင်ငံ၏ လက်ရှိ အုပ်ချုပ်ရေး မြို့တော် ဖြစ်ပါသည်။ ကျယ်ဝန်းသော လမ်းမကြီးများ၊ အစိုးရ ရုံးဌာနများနှင့် စနစ်တကျ တည်ဆောက်ထားသော မြို့ပြတစ်ခု ဖြစ်ပါသည်။ ဥပ္ပါတသန္တိ စေတီတော်ကြီးမှာ နေပြည်တော်တွင် အလွန်ထင်ရှားသော စေတီတော် ဖြစ်ပါသည်။"
-    ];
-    for(let i=70; i<110; i++) {
-        allData.push({ title: `အခန်း ${i+1}: မြို့ပြအကြောင်း`, text: cityPool[i % 3] + " ဤဒေသ၏ ထူးခြားသော ယဉ်ကျေးမှုနှင့် သဘာဝအလှတရားများကို လေ့လာနိုင်ပါသည်။" });
-    }
-
-    // ၁၁၁ မှ ၁၅၀: သီချင်းစာသားနှင့် ခေတ်ပေါ်စာပေ
-    const songPool = [
-        "မြန်မာပြည်ကြီး ငြိမ်းချမ်းပါစေ၊ တို့မြေ တို့ရေ တို့ချစ်တဲ့မြေ။ သာယာလှပတဲ့ တောတောင်ရေမြေများနဲ့ ပြည့်စုံတဲ့ မြန်မာပြည်ကြီးမှာ တို့အားလုံး စည်းစည်းလုံးလုံး နေထိုင်ကြမယ်။ ကမ္ဘာတည်သရွေ့ မြန်မာပြည်သည် တို့ရဲ့ အမိမြေ ဖြစ်ပါသည်။ သွေးချင်းတို့ရဲ့ အချစ်များဖြင့် တည်ဆောက်ထားသော နိုင်ငံတော်ကြီး ဖြစ်ပါသည်။",
-        "အမေဆိုသည်မှာ လောကတွင် အကြီးမြတ်ဆုံးသော ပုဂ္ဂိုလ် ဖြစ်ပါသည်။ သားသမီးများအပေါ် ထားရှိသော မေတ္တာတရားသည် အတိုင်းအဆမရှိ ကြီးမားလှပါသည်။ အမေ့ရဲ့ ကျေးဇူးတရားများကို ဆပ်လို့ ကုန်နိုင်မည် မဟုတ်ပါ။ မေတ္တာရှင် အမေ့ကို အမြဲတမ်း တန်ဖိုးထား ချစ်ခင်ကြပါစို့။"
-    ];
-    for(let i=110; i<150; i++) {
-        allData.push({ title: `အခန်း ${i+1}: စာပေနှင့် သီချင်း`, text: songPool[i % 2] + " (စာသားများကို စည်းချက်ညီစွာ ရိုက်နှိပ်ပါ)" });
-    }
-
-    // Logic Functions
-    const fingers = { 'ဆ':'L5','ေ':'L5','ဖ':'L5','ဍ':'L5','ဗ':'L5','ဃ':'L5','တ':'L4','ှ':'L4','ထ':'L4','ဋ':'L4','ဌ':'L4','န':'L3','ိ':'L3','ခ':'L3','ဏ':'L3','ီ':'L3','ခြ':'L3','မ':'L2','အ':'L2','်':'L2','ါ':'L2','လ':'L2','ဘ':'L2','ဣ':'L2','ဤ':'L2','ဠ':'L2','ပ':'R2','က':'R2','့':'R2','ြ':'R2','ည':'R2','ာ':'R2','ဥ':'R2','ဦ':'R2','ွ':'R2','င':'R3','ု':'R3','ယ':'R3','ဧ':'R3','ူ':'R3','သ':'R4','ူ':'R4','ဝ':'R4','သြ':'R4','၎':'R4','စ':'R5','း':'R5','၏':'R5','၌':'R5',' ':'R1' };
-
-    let curIdx = 0, timer = null;
-
-    function buildMenu() {
-        const list = document.getElementById('nav-list');
-        let currentGrp = "";
-        allData.forEach((l, i) => {
-            let grp = (i < 33) ? "မြန်မာဗျည်း (က-အ)" : (i < 70 ? "မြန်မာ့သမိုင်း" : (i < 110 ? "မြို့ပြများ" : "သီချင်းစာသား"));
-            if(grp !== currentGrp) {
-                const tag = document.createElement('span'); tag.className = 'grp-tag';
-                tag.innerText = grp; list.appendChild(tag); currentGrp = grp;
-            }
-            const btn = document.createElement('button'); btn.className = 'lesson-btn';
-            btn.innerText = l.title; btn.onclick = () => loadLevel(i);
-            list.appendChild(btn);
-        });
-        loadLevel(0);
-    }
-
-    function loadLevel(idx) {
-        curIdx = idx;
-        document.getElementById('cur-lesson-name').innerText = allData[idx].title;
-        document.getElementById('text-box').innerHTML = allData[idx].text.split('').map((c,i) => `<span class="${i===0?'next-char':''}">${c}</span>`).join('');
-        document.getElementById('input-field').value = '';
-        document.querySelectorAll('.lesson-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
-        updateHands(allData[idx].text[0]);
-        timer = null;
-    }
-
-    function updateHands(char) {
-        document.querySelectorAll('.finger').forEach(f => f.classList.remove('active'));
-        const fId = fingers[char];
-        if(fId) document.getElementById(fId).classList.add('active');
-    }
-
-    document.getElementById('input-field').addEventListener('input', (e) => {
-        if(!timer) timer = new Date();
-        const val = e.target.value;
-        const text = allData[curIdx].text;
-        const spans = document.getElementById('text-box').querySelectorAll('span');
-        
-        spans.forEach((s, i) => {
-            s.className = (val[i] == null) ? (i === val.length ? 'next-char' : '') : (val[i] === s.innerText ? 'correct-char' : 'wrong-char');
-        });
-
-        updateHands(text[val.length] || '');
-        const elapsed = (new Date() - timer) / 60000;
-        document.getElementById('wpm-tag').innerText = Math.round((val.length / 5) / elapsed) || 0;
-
-        if(val === text) {
-            alert("ဂုဏ်ယူပါတယ်! သင်ခန်းစာ အောင်မြင်စွာ ပြီးဆုံးပါသည်။");
-            if(curIdx < allData.length - 1) loadLevel(curIdx + 1);
+    // Authentication Logic (Password: aungphyo529)
+    function checkPass() {
+        const p = document.getElementById('pass-input').value;
+        if(p === "aungphyo529") {
+            document.getElementById('auth-overlay').style.display = 'none';
+        } else {
+            alert("Password မှားယွင်းနေပါသည်။");
         }
+    }
+
+    const data = [];
+    
+    // Group 1: 1-20 Alphabet Poems (Extended)
+    const alphabetSet = [
+        "ကကြီး ကလေး ငို၊ ကိုကို ချော့လို့ နို့စို့စို့။ ခကွေး ကွေးကွေး၊ ခွေးကလေးကို ကျွေးကျွေး။ ဂငယ် ငယ်ငယ်၊ ငါးကလေး ဖမ်းမယ်။ ဃကြီး ကြီးမား၊ ဆင်ကြီး သွား။ င ကလေး ငြိမ်ငြိမ်၊ အိမ်မှာ ထိုင်။ စလုံး လုံးလုံး၊ ထမင်းလုံးကို စား။ ဆလိမ် လိမ်လိမ်၊ ကြိုးကလေးကို လိမ်။ ဇကွဲ ကွဲကွဲ၊ အိုးကလေး ကွဲ။ ဈမျဉ်းဆွဲ ဆွဲ၊ စာကြောင်း ဆွဲ။ ညလေး လေးလေး၊ ကလေးငယ် လေး။ ဋသန်လျင်းချိတ် ချိတ်၊ တံငါသည် ချိတ်။ ဌဝမ်းဘဲ ဘဲ၊ ရေထဲမှာ ဘဲ။ ဍရင်ကောက် ကောက်၊ လမ်းကလေး ကောက်။ ဎရေမှုတ် မှုတ်၊ ရေကို မှုတ်။ ဏကြီး ကြီးမား၊ ဂုဏ်အင်္ဂါ များ။ တဝမ်းပူ ပူ၊ ထမင်းအိုး ပူ။ ထဆင်ထူး ထူး၊ ထူးထူး ခြားခြား။ ဒဒွေး ဒွေးဒွေး၊ ဒေါ်ဒေါ် ပေး။ ဓအလံထူ ထူ၊ အလံကို ထူ။ နငယ် ငယ်ငယ်၊ ညီမလေး ငယ်။ ပစောက် စောက်စောက်၊ တွင်းကလေး စောက်။ ဖဦးထုပ် ထုပ်၊ ဦးထုပ်ကို ထုပ်။ ဗထက်ခြိုက် ခြိုက်၊ ထမင်းကို ခြိုက်။ ဘကုန်း ကုန်းကုန်း၊ လမ်းကလေး ကုန်း။ မလေး လေးလေး၊ ကလေးငယ် လေး။ ယပက်လက် လက်၊ လွယ်အိတ်ကို လက်။ ရကောက် ကောက်ကောက်၊ လမ်းကလေး ကောက်။ လငယ် ငယ်ငယ်၊ ငါးကလေး ဖမ်းမယ်။ ဝလုံး လုံးလုံး၊ ထမင်းလုံးကို စား။ သငယ် ငယ်ငယ်၊ ငါးကလေး ဖမ်းမယ်။ ဟဟားဟား ဟား၊ ရယ်လိုက်ကြ ဟား။ ဠကြီး ကြီးမား၊ ဆင်ကြီး သွား။ အ အအေး၊ အအေးကို သောက်။",
+        // repeat or add extended variations to reach 20 lessons with very long texts
+    ];
+
+    for(let i=0; i<20; i++) {
+        data.push({ title: `အခန်း ${i+1}: ဗျည်းကဗျာ (အကျယ်)`, text: alphabetSet[0] + " ဤသည်မှာ မြန်မာစာပေ၏ အခြေခံဗျည်း ၃၃ လုံးကို ကျွမ်းကျင်စွာ ရိုက်နှိပ်နိုင်ရန်အတွက် အထူးစီစဉ်ထားသော သင်ခန်းစာဖြစ်ပါသည်။ လက်ချောင်းများကို မှန်ကန်စွာအသုံးပြုပြီး အမြန်နှုန်းထက် တိကျမှုကို ပိုမိုဦးစားပေး လေ့ကျင့်ပေးပါရန် တိုက်တွန်းအပ်ပါသည်။" });
+    }
+
+    // Group 2: 21-50 Myanmar History (Very Long)
+    for(let i=21; i<=50; i++) {
+        data.push({ title: `အခန်း ${i}: မြန်မာ့သမိုင်းကြောင်း`, text: "မြန်မာနိုင်ငံ၏ သမိုင်းကြောင်းသည် အလွန်ရှည်လျားပြီး ဂုဏ်ယူဖွယ်ရာများဖြင့် ပြည့်နှက်နေပါသည်။ ပုဂံခေတ်တွင် အနော်ရထာမင်းကြီးသည် ပထမမြန်မာနိုင်ငံတော်ကို တည်ထောင်ခဲ့ပြီး ထေရဝါဒဗုဒ္ဓဘာသာကို စတင်အခြေချခဲ့သည်။ ထို့နောက် အင်းဝ၊ တောင်ငူ နှင့် ကုန်းဘောင်ခေတ်များအထိ မြန်မာ့စစ်အင်အားနှင့် စာပေယဉ်ကျေးမှုများသည် အရှေ့တောင်အာရှတွင် ထိပ်တန်းသို့ ရောက်ရှိခဲ့သည်။ သမိုင်းကို သိရှိခြင်းဖြင့် မိမိတို့၏ မျိုးချစ်စိတ်ဓာတ်ကို ပိုမိုနိုးကြားစေနိုင်ပါသည်။" });
+    }
+
+    // Group 3: 51-100 Cities of Myanmar (Detailed)
+    const cities = [
+        "ရန်ကုန်မြို့သည် မြန်မာနိုင်ငံ၏ အကြီးဆုံးမြို့တော်ဖြစ်ပြီး စီးပွားရေးအချက်အချာကျသော မြို့ဖြစ်သည်။ ရွှေတိဂုံစေတီတော်မြတ်ကြီးမှာ ကမ္ဘာကျော်ပြီး နိုင်ငံခြားသားများစွာ လာရောက်လည်ပတ်လေ့ရှိသည်။",
+        "မန္တလေးမြို့သည် မြန်မာ့ယဉ်ကျေးမှုမြို့တော်ဖြစ်ပြီး ရှေးဟောင်းအဆောက်အအုံများနှင့် နန်းတော်ကြီးတို့မှာ ထင်ရှားလှပါသည်။",
+        "နေပြည်တော်သည် လက်ရှိမြန်မာနိုင်ငံ၏ အုပ်ချုပ်ရေးမြို့တော်ဖြစ်ပြီး စနစ်တကျ တည်ဆောက်ထားသော လမ်းမကြီးများဖြင့် သပ်ရပ်လှပနေပါသည်။"
+    ];
+    for(let i=51; i<=100; i++) {
+        data.push({ title: `အခန်း ${i}: မြန်မာပြည်မှမြို့များ`, text: cities[i % 3] + " ဤဒေသ၏ ထူးခြားသော ရာသီဥတုနှင့် ဒေသခံတို့၏ ဖော်ရွေပျူငှာမှုများကို တွေ့မြင်ရမည် ဖြစ်ပါသည်။ လေ့ကျင့်ခန်းကို ဆက်လက်လုပ်ဆောင်ပေးပါ။ နိုင်ငံတစ်ဝန်းရှိ မြို့ပြများ၏ တိုးတက်ပြောင်းလဲမှုများကို ဤသင်ခန်းစာတွင် လေ့လာနိုင်ပါသည်။" });
+    }
+
+    // Group 4: 101-150 Song Lyrics
+    for(let i=101; i<=150; i++) {
+        data.push({ title: `အခန်း ${i}: သီချင်းစာသား`, text: "မြန်မာပြည်ကြီး ငြိမ်းချမ်းပါစေ၊ တို့မြေ တို့ရေ တို့ချစ်တဲ့မြေ။ သာယာလှပတဲ့ တောတောင်ရေမြေများနဲ့ ပြည့်စုံတဲ့ မြန်မာပြည်ကြီးမှာ တို့အားလုံး စည်းစည်းလုံးလုံး နေထိုင်ကြမယ်။ ကမ္ဘာတည်သရွေ့ မြန်မာပြည်သည် တို့ရဲ့ အမိမြေ ဖြစ်ပါသည်။ သီချင်းစာသားများကို စည်းချက်ညီညီ ရိုက်နှိပ်ကြည့်ပါ။ ဤစာသားများသည် စိတ်ဓာတ်ခွန်အားကို ဖြစ်ပေါ်စေပါသည်။" });
+    }
+
+    const keys = [
+        [{n:'ဆ',s:'ဍ'},{n:'တ',s:'ဋ'},{n:'န',s:'ဏ'},{n:'မ',s:'ဣ'},{n:'အ',s:'ဤ'},{n:'ပ',s:'ဥ'},{n:'က',s:'ဦ'},{n:'င',s:'ဧ'},{n:'သ',s:'သြ'},{n:'စ',s:'၌'}],
+        [{n:'ေ',s:'ဗ'},{n:'ှ',s:'ှ'},{n:'ိ',s:'ီ'},{n:'်',s:'်'},{n:'ါ',s:'ာ'},{n:'့',s:'့'},{n:'ြ',s:'ွ'},{n:'ု',s:'ူ'},{n:'ူ',s:'ူး'},{n:'း',s:'၏'}],
+        [{n:'ဖ',s:'ဃ'},{n:'ထ',s:'ဌ'},{n:'ခ',s:'ခြ'},{n:'လ',s:'ဠ'},{n:'ဘ',s:'ဘ'},{n:'ည',s:'ည'},{n:'ာ',s:'ါ'},{n:'ယ',s:'၌'},{n:'ဝ',s:'၎'}]
+    ];
+
+    const fMap = {'ဆ':'L5','ေ':'L5','ဖ':'L5','တ':'L4','ှ':'L4','ထ':'L4','န':'L3','ိ':'L3','ခ':'L3','မ':'L2','အ':'L2','်':'L2','ါ':'L2','လ':'L2','ဘ':'L2','ပ':'R2','က':'R2','့':'R2','ြ':'R2','ည':'R2','ာ':'R2','င':'R3','ု':'R3','ယ':'R3','သ':'R4','ဝ':'R4','စ':'R5','း':'R5',' ':'R1'};
+
+    let cur = 0, time = null;
+
+    function init() {
+        const nav = document.getElementById('lesson-nav');
+        let currentGrp = "";
+        data.forEach((l, i) => {
+            let grpName = i < 20 ? "ဗျည်းကဗျာ" : i < 50 ? "မြန်မာ့သမိုင်း" : i < 100 ? "မြို့များ" : "သီချင်း";
+            if(grpName !== currentGrp){
+                const t = document.createElement('span'); t.className = 'grp-title'; t.innerText = grpName;
+                nav.appendChild(t); currentGrp = grpName;
+            }
+            const b = document.createElement('button'); b.className = 'lesson-btn';
+            b.innerText = l.title; b.onclick = () => load(i); nav.appendChild(b);
+        });
+
+        const kb = document.getElementById('kb-ui');
+        keys.forEach(r => {
+            const d = document.createElement('div'); d.className = 'row';
+            r.forEach(k => d.innerHTML += `<div class="key" data-n="${k.n}" data-s="${k.s}"><span class="sh">${k.s}</span>${k.n}</div>`);
+            kb.appendChild(d);
+        });
+        kb.innerHTML += `<div class="row"><div class="key space" data-n=" ">Space Bar</div></div>`;
+        load(0);
+    }
+
+    function load(idx) {
+        cur = idx;
+        document.getElementById('title').innerText = data[idx].title;
+        document.getElementById('display').innerHTML = data[idx].text.split('').map((c,i) => `<span class="${i===0?'next':''}">${c}</span>`).join('');
+        document.getElementById('input').value = '';
+        document.querySelectorAll('.lesson-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+        update(data[idx].text[0]);
+        time = null;
+    }
+
+    function update(c) {
+        document.querySelectorAll('.key, .finger').forEach(el => el.classList.remove('active'));
+        let k = document.querySelector(`.key[data-n="${c}"]`) || document.querySelector(`.key[data-s="${c}"]`);
+        if(k) k.classList.add('active');
+        if(fMap[c]) document.getElementById(fMap[c]).classList.add('active');
+    }
+
+    document.getElementById('input').addEventListener('input', (e) => {
+        if(!time) time = new Date();
+        const v = e.target.value, t = data[cur].text, spans = document.getElementById('display').querySelectorAll('span');
+        spans.forEach((s, i) => s.className = (v[i] == null) ? (i === v.length ? 'next' : '') : (v[i] === s.innerText ? 'ok' : 'error'));
+        update(t[v.length] || '');
+        document.getElementById('wpm').innerText = Math.round((v.length/5)/((new Date()-time)/60000)) || 0;
+        if(v === t) { if(cur < 149) load(cur+1); }
     });
 
-    buildMenu();
+    init();
 </script>
 </body>
 </html>
