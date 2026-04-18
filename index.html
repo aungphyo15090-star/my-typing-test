@@ -3,208 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Myanmar Typing Pro - Image 9 Edition</title>
+    <title>Myanmar Typing Pro - 100 Lessons Edition</title>
     <link href="https://mmwebfonts.comquas.com/fonts/pyidaungsu.css" rel="stylesheet">
     <style>
-        :root { --bg: #f8f9fa; --sidebar: #2c3e50; --accent: #3498db; --skin: #ffdbac; --white: #ffffff; --text: #333; }
-        body { font-family: 'Pyidaungsu', sans-serif; background: var(--bg); margin: 0; display: flex; height: 100vh; overflow: hidden; color: var(--text); }
+        :root { --bg: #f0f2f5; --main: #2c3e50; --accent: #e67e22; --skin: #ffe0bd; --white: #fff; }
+        body { font-family: 'Pyidaungsu', sans-serif; background: var(--bg); margin: 0; display: flex; height: 100vh; overflow: hidden; }
         
-        /* Sidebar */
-        .sidebar { width: 300px; background: var(--sidebar); color: white; display: flex; flex-direction: column; box-shadow: 3px 0 15px rgba(0,0,0,0.2); }
-        .sidebar-header { padding: 25px; font-size: 1.2rem; font-weight: bold; border-bottom: 2px solid #34495e; text-align: center; background: #1a252f; }
-        .lesson-container { flex: 1; overflow-y: auto; padding: 15px; }
-        .lesson-item { padding: 12px; margin-bottom: 8px; border-radius: 8px; cursor: pointer; transition: 0.2s; font-size: 14px; background: rgba(255,255,255,0.05); border-left: 4px solid transparent; }
-        .lesson-item:hover { background: rgba(255,255,255,0.1); }
-        .lesson-item.active { background: var(--accent); color: white; border-left-color: #fff; }
+        /* Sidebar Lesson List */
+        .sidebar { width: 320px; background: var(--main); color: white; display: flex; flex-direction: column; }
+        .sidebar-header { padding: 20px; background: #1a252f; text-align: center; border-bottom: 2px solid var(--accent); }
+        .lesson-list { flex: 1; overflow-y: auto; padding: 10px; }
+        .lesson-btn { width: 100%; padding: 10px; margin-bottom: 5px; background: rgba(255,255,255,0.1); border: none; color: white; border-radius: 5px; cursor: pointer; text-align: left; font-size: 13px; }
+        .lesson-btn.active { background: var(--accent); }
 
-        /* Main Content */
-        .main-content { flex: 1; display: flex; flex-direction: column; align-items: center; padding: 20px; overflow-y: auto; position: relative; }
-        .app-card { background: var(--white); width: 100%; max-width: 950px; padding: 30px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
+        /* Main Display Area */
+        .content { flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center; }
+        .app-card { background: var(--white); width: 100%; max-width: 1000px; padding: 25px; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); }
         
-        /* Interactive Hands Guide (ABOVE Input) */
-        .hands-view { display: flex; justify-content: center; gap: 40px; margin-bottom: 10px; }
-        .hand-svg { width: 150px; height: auto; opacity: 0.9; }
-        .finger { fill: var(--skin); stroke: #d35400; stroke-width: 1.5; transition: 0.1s ease-out; transform-origin: center bottom; }
-        .active-finger { fill: #f39c12 !important; transform: translateY(-10px) scaleY(1.05); stroke: #e67e22; stroke-width: 2.5; }
+        #text-display { font-size: 24px; line-height: 1.8; padding: 20px; background: #f9f9f9; border-radius: 10px; border: 1px solid #ddd; margin-bottom: 15px; text-align: left; min-height: 100px; }
+        .char-next { border-bottom: 3px solid var(--accent); background: #fff4e6; }
+        .char-correct { color: #27ae60; }
+        .char-wrong { background: #e74c3c; color: white; border-radius: 3px; }
 
-        #display-text { font-size: 26px; background: #fafafa; padding: 20px; border-radius: 12px; min-height: 80px; line-height: 1.8; border: 1px solid #eee; margin-bottom: 20px; text-align: left; }
-        .correct { color: #27ae60; }
-        .incorrect { background: #e74c3c; color: white; border-radius: 4px; }
-        .current { border-bottom: 3px solid var(--accent); animation: blink 1s infinite; }
-        @keyframes blink { 50% { border-color: transparent; } }
+        input { width: 100%; padding: 15px; font-size: 22px; border: 2px solid #ddd; border-radius: 8px; outline: none; margin-bottom: 20px; font-family: 'Pyidaungsu'; }
 
-        input { width: 100%; padding: 15px; font-size: 22px; border: 2px solid #ddd; border-radius: 10px; outline: none; font-family: 'Pyidaungsu'; margin-bottom: 20px; }
+        /* Hand Guide UI (Image 9 Style) */
+        .hands-container { display: flex; justify-content: center; gap: 60px; margin-bottom: 15px; }
+        .hand { position: relative; width: 180px; height: 140px; }
+        .finger-tip { position: absolute; width: 28px; height: 35px; background: var(--skin); border-radius: 15px 15px 5px 5px; border: 1px solid #d35400; transition: 0.2s; }
+        .finger-tip.active { background: var(--accent); transform: scale(1.2); box-shadow: 0 0 10px var(--accent); border-color: white; }
+        
+        /* Left Hand Positions */
+        #L5 { left: 10px; top: 50px; } #L4 { left: 45px; top: 25px; } #L3 { left: 80px; top: 15px; } #L2 { left: 115px; top: 25px; } #L1 { left: 145px; top: 90px; border-radius: 15px; width: 35px; }
+        /* Right Hand Positions */
+        #R1 { right: 145px; top: 90px; border-radius: 15px; width: 35px; } #R2 { right: 115px; top: 25px; } #R3 { right: 80px; top: 15px; } #R4 { right: 45px; top: 25px; } #R5 { right: 10px; top: 50px; }
 
-        /* Keyboard (Image 9 Layout) */
-        .keyboard { background: #34495e; padding: 15px; border-radius: 15px; width: 100%; box-sizing: border-box; }
-        .kb-row { display: flex; justify-content: center; gap: 4px; margin-bottom: 6px; }
-        .key { background: #ecf0f1; color: #333; min-width: 40px; height: 45px; display: flex; flex-direction: column; align-items: center; justify-content: center; border-radius: 6px; font-size: 14px; font-weight: bold; flex: 1; border-bottom: 3px solid #ccc; position: relative; }
-        .key span.s-char { font-size: 10px; color: #7f8c8d; margin-bottom: 2px; }
-        .key.active { background: #f39c12; color: white; border-bottom: none; transform: translateY(2px); }
-        .key.space { flex: 6; }
-        .key.shift-key { flex: 1.5; background: #bdc3c7; }
+        /* Keyboard UI */
+        .keyboard { background: #34495e; padding: 12px; border-radius: 12px; width: 100%; }
+        .kb-row { display: flex; justify-content: center; gap: 4px; margin-bottom: 5px; }
+        .key { background: white; min-width: 42px; height: 48px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; border-bottom: 3px solid #bdc3c7; flex: 1; }
+        .key.active { background: var(--accent); color: white; border-bottom: none; transform: translateY(2px); }
+        .key span.sh { font-size: 10px; color: #95a5a6; }
+        .key.space { flex: 7; }
+        .key.side { flex: 1.5; background: #bdc3c7; }
     </style>
 </head>
 <body>
 
 <div class="sidebar">
-    <div class="sidebar-header">မြန်မာစာ လက်ကွက်ကျင့်စဉ်</div>
-    <div class="lesson-container" id="lesson-list"></div>
+    <div class="sidebar-header">
+        <div style="font-size: 18px; color: var(--accent);">AUNG PHYO WIN</div>
+        <small>Lessons 1 - 100</small>
+    </div>
+    <div class="lesson-list" id="lesson-btns"></div>
 </div>
 
-<div class="main-content">
+<div class="content">
     <div class="app-card">
-        <h3 id="lesson-title" style="margin-top:0; color:var(--sidebar); text-align:center;">အခန်း ၁</h3>
-        
-        <div id="display-text"></div>
-        <input type="text" id="input-field" placeholder="ဒီမှာ စတင်ရိုက်နှိပ်ပါ..." autocomplete="off" autofocus>
-
-        <div class="hands-view">
-            <svg class="hand-svg" viewBox="0 0 200 200">
-                <path id="L5" class="finger" d="M30,120 Q30,60 50,60 L60,60 Q80,60 80,120 Z" />
-                <path id="L4" class="finger" d="M60,110 Q60,40 80,40 L90,40 Q110,40 110,110 Z" />
-                <path id="L3" class="finger" d="M95,100 Q95,30 115,30 L125,30 Q145,30 145,100 Z" />
-                <path id="L2" class="finger" d="M130,110 Q130,50 150,50 L160,50 Q180,50 180,110 Z" />
-                <path id="L1" class="finger" d="M160,150 Q190,150 190,170 L170,190 Q140,190 140,160 Z" />
-            </svg>
-            <svg class="hand-svg" viewBox="0 0 200 200">
-                <path id="R1" class="finger" d="M40,150 Q10,140 10,170 L30,190 Q60,190 60,160 Z" />
-                <path id="R2" class="finger" d="M20,110 Q20,30 40,30 L50,30 Q70,30 70,110 Z" />
-                <path id="R3" class="finger" d="M55,100 Q55,10 75,10 L85,10 Q105,10 105,100 Z" />
-                <path id="R4" class="finger" d="M90,110 Q90,20 110,20 L120,20 Q140,20 140,110 Z" />
-                <path id="R5" class="finger" d="M120,120 Q120,40 140,40 L150,40 Q170,40 170,120 Z" />
-            </svg>
+        <div style="display:flex; justify-content: space-between; margin-bottom: 10px; font-weight: bold;">
+            <div id="lesson-title">Lesson 1</div>
+            <div>Speed: <span id="wpm">0</span> WPM</div>
         </div>
 
-        <div class="keyboard" id="kb-ui">
+        <div id="text-display"></div>
+        <input type="text" id="type-input" placeholder="ဒီမှာ စတင်ရိုက်နှိပ်ပါ..." autocomplete="off">
+
+        <div class="hands-container">
+            <div class="hand">
+                <div id="L5" class="finger-tip"></div><div id="L4" class="finger-tip"></div>
+                <div id="L3" class="finger-tip"></div><div id="L2" class="finger-tip"></div>
+                <div id="L1" class="finger-tip"></div>
             </div>
+            <div class="hand">
+                <div id="R1" class="finger-tip"></div><div id="R2" class="finger-tip"></div>
+                <div id="R3" class="finger-tip"></div><div id="R4" class="finger-tip"></div>
+                <div id="R5" class="finger-tip"></div>
+            </div>
+        </div>
+
+        <div class="keyboard" id="kb-grid"></div>
     </div>
 </div>
 
 <script>
+    // လေ့ကျင့်ခန်း ၁၀၀ စာရင်း (နမူနာအချို့၊ သင်နှစ်သက်သလို ထပ်တိုးနိုင်သည်)
     const lessons = [
-        { title: "ကကြီး ကဗျာ (ရှည်)", text: "ကကြီး ကလေး ငို၊ ကိုကို ချော့လို့ နို့စို့စို့။ ကကြီးသည် မြန်မာဗျည်းအက္ခရာများတွင် ပထမဆုံး အက္ခရာဖြစ်ပြီး ကလေးငယ်များအတွက် အလွန် ရင်းနှီးသော စာလုံးဖြစ်သည်။ ကကြီးကို ရေးသားရာတွင် ဝိုင်းဝန်းသော ပုံစံရှိရမည်ဖြစ်ပြီး စာလုံးအလှ ရေးသားခြင်းတွင် အလွန် အခြေခံကျသော စာလုံး ဖြစ်ပါသည်။" },
-        { title: "ခကွေး ကဗျာ (ရှည်)", text: "ခကွေး ကွေးကွေး၊ ခွေးကလေးကို ကျွေးကျွေး။ ခကွေး အက္ခရာကို ရေးသားရာတွင် စာလုံးအဝိုင်းများကို ကျွမ်းကျင်စွာ ရေးတတ်ရန် အလွန်အရေးကြီးပြီး မြန်မာစာအလှရေးသားမှုတွင် အခြေခံကျသည်။" },
-        // ... က ကဗျာ မှ အ ကဗျာ အထိ အပြည့်အစုံ
-        { title: "မြန်မာနိုင်ငံ အကြောင်း (ရှည်)", text: "မြန်မာနိုင်ငံသည် အရှေ့တောင်အာရှတွင် တည်ရှိပြီး ယဉ်ကျေးမှု အမွေအနှစ်များ ပေါကြွယ်ဝသော နိုင်ငံဖြစ်သည်။ ဧရာဝတီမြစ်သည် နိုင်ငံ၏ အသက်သွေးကြောဖြစ်ပြီး စိုက်ပျိုးရေးကဏ္ဍတွင် အဓိက အရေးပါသည်။ ရန်ကုန်မြို့နှင့် မန္တလေးမြို့တို့သည် စီးပွားရေးနှင့် ယဉ်ကျေးမှု ဗဟိုချက်များ ဖြစ်ကြသည်။" },
-        { title: "ဂျပန်နိုင်ငံ အကြောင်း (ရှည်)", text: "ဂျပန်နိုင်ငံသည် အရှေ့အာရှတွင် တည်ရှိသော ကျွန်းနိုင်ငံတစ်ခု ဖြစ်ပြီး နည်းပညာ ထွန်းကားမှုတွင် ကမ္ဘာ့ထိပ်တန်း ဖြစ်သည်။ တိုကျိုမြို့သည် ကမ္ဘာ့လူဦးရေ အထူထပ်ဆုံး မြို့တော်များထဲတွင် ပါဝင်ပြီး စည်းကမ်းစနစ် ကျနမှုကြောင့် ထင်ရှားသည်။ ဆာကူရာ ပန်းများမှာ ဂျပန်နိုင်ငံ၏ သင်္ကေတ တစ်ခု ဖြစ်သည်။" }
+        { t: "ကကြီး ကဗျာ (အစ)", c: "ကကြီး ကလေး ငို၊ ကိုကို ချော့လို့ နို့စို့စို့။ ကကြီးသည် ဗျည်းအက္ခရာများတွင် ပထမဆုံးဖြစ်ပြီး စတင်သင်ယူသူတိုင်းအတွက် အခြေခံအကျဆုံး စာလုံးဖြစ်ပါသည်။" },
+        { t: "ခကွေး ကဗျာ", c: "ခကွေး ကွေးကွေး၊ ခွေးကလေးကို ကျွေးကျွေး။ ခကွေးကို ရေးသားရာတွင် စာလုံးအဝိုင်းများကို စနစ်တကျ ရေးသားတတ်ရန် အထူးလိုအပ်ပါသည်။" },
+        { t: "မြန်မာနိုင်ငံအကြောင်း", c: "မြန်မာနိုင်ငံသည် သဘာဝသယံဇာတ ပေါကြွယ်ဝပြီး တောတောင်ရေမြေ လှပသော နိုင်ငံဖြစ်သည်။ ဧရာဝတီမြစ်သည် နိုင်ငံ၏ အဓိက အသက်သွေးကြော ဖြစ်ပါသည်။" },
+        { t: "ဂျပန်နိုင်ငံအကြောင်း", c: "ဂျပန်နိုင်ငံသည် အရှေ့အာရှတွင် တည်ရှိသော ကျွန်းနိုင်ငံတစ်ခုဖြစ်ပြီး နည်းပညာနှင့် စည်းကမ်းကောင်းမွန်မှုတွင် ကမ္ဘာကျော်သည်။ တိုကျိုမြို့သည် လူဦးရေ အထူထပ်ဆုံးမြို့ဖြစ်သည်။" },
+        { t: "စင်ကာပူနိုင်ငံအကြောင်း", c: "စင်ကာပူနိုင်ငံသည် သေးငယ်သော်လည်း စီးပွားရေး အလွန်တောင့်တင်းသော နိုင်ငံဖြစ်သည်။ ကမ္ဘာ့အသန့်ရှင်းဆုံး မြို့ပြနိုင်ငံများထဲတွင် တစ်ခုအပါအဝင် ဖြစ်သည်။" }
     ];
+    // ၁၀၀ ပြည့်အောင် Loop ပတ်၍ Generate လုပ်ထားခြင်း (စာသားများကို နောက်မှ ပြင်နိုင်သည်)
+    for(let i=6; i<=100; i++) {
+        lessons.push({ t: `Lesson ${i}: Typing Practice`, c: `ဒါကတော့ နံပါတ် ${i} မြောက် လေ့ကျင့်ခန်း ဖြစ်ပါတယ်။ စာလုံးများကို မှန်ကန်အောင် အနှေးနှင့် အမြန် ရောနှော၍ လေ့ကျင့်ပေးပါ။` });
+    }
 
-    // Image 9 Keyboard Layout with Shifts (Image 9 style)
-    const keyboardLayout = [
-        [{n:'ဆ', s:'ဍ'}, {n:'တ', s:'ဋ'}, {n:'န', s:'ဏ'}, {n:'မ', s:'ဣ'}, {n:'အ', s:'ဤ'}, {n:'ပ', s:'ဥ'}, {n:'က', s:'ဦ'}, {n:'င', s:'ဧ'}, {n:'သ', s:'သြ'}, {n:'စ', s:'၌'}],
-        [{n:'ေ', s:'ဗ'}, {n:'ှ', s:'ှ'}, {n:'ိ', s:'ီ'}, {n:'်', s:'်'}, {n:'ါ', s:'ာ'}, {n:'့', s:'့'}, {n:'ြ', s:'ွ'}, {n:'ု', s:'ူ'}, {n:'ူ', s:'ူး'}, {n:'း', s:'၏'}],
-        [{n:'ဖ', s:'ဃ'}, {n:'ထ', s:'ဌ'}, {n:'ခ', s:'ခြ'}, {n:'လ', s:'ဠ'}, {n:'ဘ', s:'ဘ'}, {n:'ည', s:'ည'}, {n:'ာ', s:'ါ'}, {n:'ယ', s:'၌'}, {n:'ဝ', s:'၎'}, {n:'၏', s:'၏'}]
+    const kbLayout = [
+        [{n:'ဆ',s:'ဍ'},{n:'တ',s:'ဋ'},{n:'န',s:'ဏ'},{n:'မ',s:'ဣ'},{n:'အ',s:'ဤ'},{n:'ပ',s:'ဥ'},{n:'က',s:'ဦ'},{n:'င',s:'ဧ'},{n:'သ',s:'သြ'},{n:'စ',s:'၌'}],
+        [{n:'ေ',s:'ဗ'},{n:'ှ',s:'ှ'},{n:'ိ',s:'ီ'},{n:'်',s:'်'},{n:'ါ',s:'ာ'},{n:'့',s:'့'},{n:'ြ',s:'ွ'},{n:'ု',s:'ူ'},{n:'ူ',s:'ူး'},{n:'း',s:'၏'}],
+        [{n:'ဖ',s:'ဃ'},{n:'ထ',s:'ဌ'},{n:'ခ',s:'ခြ'},{n:'လ',s:'ဠ'},{n:'ဘ',s:'ဘ'},{n:'ည',s:'ည'},{n:'ာ',s:'ါ'},{n:'ယ',s:'၌'},{n:'ဝ',s:'၎'}]
     ];
 
     const fingerMap = {
-        'ဆ':'L5','ေ':'L5','ဖ':'L5','ဍ':'L5','ဗ':'L5','ဃ':'L5','တ':'L4','ှ':'L4','ထ':'L4','ဋ':'L4','ဌ':'L4','န':'L3','ိ':'L3','ခ':'L3','ဏ':'L3','ီ':'L3','မ':'L2','အ':'L2','်':'L2','ါ':'L2','လ':'L2','ဘ':'L2','ဣ':'L2','ဤ':'L2','ဠ':'L2','ပ':'R2','က':'R2','့':'R2','ြ':'R2','ည':'R2','ာ':'R2','ဥ':'R2','ဦ':'R2','ွ':'R2','င':'R3','ု':'R3','ယ':'R3','ဧ':'R3','ူ':'R3','သ':'R4','ူ':'R4','ဝ':'R4','သြ':'R4','၎':'R4','စ':'R5','း':'R5','၏':'R5','၌':'R5',' ':'R1'
+        'ဆ':'L5','ေ':'L5','ဖ':'L5','ဍ':'L5','ဗ':'L5','ဃ':'L5','တ':'L4','ှ':'L4','ထ':'L4','ဋ':'L4','ဌ':'L4','န':'L3','ိ':'L3','ခ':'L3','ဏ':'L3','ီ':'L3','ခြ':'L3','မ':'L2','အ':'L2','်':'L2','ါ':'L2','လ':'L2','ဘ':'L2','ဣ':'L2','ဤ':'L2','ဠ':'L2','ပ':'R2','က':'R2','့':'R2','ြ':'R2','ည':'R2','ာ':'R2','ဥ':'R2','ဦ':'R2','ွ':'R2','င':'R3','ု':'R3','ယ':'R3','ဧ':'R3','ူ':'R3','သ':'R4','ူ':'R4','ဝ':'R4','သြ':'R4','၎':'R4','စ':'R5','း':'R5','၏':'R5','၌':'R5',' ':'R1'
     };
 
-    let currentIndex = 0;
-    const kbUi = document.getElementById('kb-ui');
-    const display = document.getElementById('display-text');
-    const input = document.getElementById('input-field');
+    let curIdx = 0, startTime = null;
 
-    function createKeyboard() {
-        kbUi.innerHTML = '';
-        keyboardLayout.forEach(row => {
-            const rowDiv = document.createElement('div');
-            rowDiv.className = 'kb-row';
-            row.forEach(key => {
-                const keyDiv = document.createElement('div');
-                keyDiv.className = 'key';
-                keyDiv.dataset.char = key.n;
-                keyDiv.dataset.shift = key.s;
-                keyDiv.innerHTML = `<span class="s-char">${key.s}</span><span>${key.n}</span>`;
-                rowDiv.appendChild(keyDiv);
+    function init() {
+        const btnBox = document.getElementById('lesson-btns');
+        lessons.forEach((l, i) => {
+            const b = document.createElement('button');
+            b.className = 'lesson-btn';
+            b.innerText = `${i+1}. ${l.t}`;
+            b.onclick = () => loadLesson(i);
+            btnBox.appendChild(b);
+        });
+
+        const grid = document.getElementById('kb-grid');
+        kbLayout.forEach((row, rIdx) => {
+            const div = document.createElement('div'); div.className = 'kb-row';
+            if(rIdx===0) div.innerHTML += '<div class="key side">Tab</div>';
+            if(rIdx===1) div.innerHTML += '<div class="key side">Caps</div>';
+            if(rIdx===2) div.innerHTML += '<div class="key side" id="sh-left">Shift</div>';
+            row.forEach(k => {
+                div.innerHTML += `<div class="key" data-n="${k.n}" data-s="${k.s}"><span class="sh">${k.s}</span>${k.n}</div>`;
             });
-            kbUi.appendChild(rowDiv);
+            if(rIdx===1) div.innerHTML += '<div class="key side">Enter</div>';
+            if(rIdx===2) div.innerHTML += '<div class="key side">Shift</div>';
+            grid.appendChild(div);
         });
-        const lastRow = document.createElement('div');
-        lastRow.className = 'kb-row';
-        lastRow.innerHTML = `<div class="key shift-key" id="key-shift">Shift</div><div class="key space" data-char=" ">Space</div>`;
-        kbUi.appendChild(lastRow);
+        grid.innerHTML += `<div class="kb-row"><div class="key space" data-n=" ">Space</div></div>`;
+        
+        loadLesson(0);
     }
 
-    function loadLesson(index) {
-        currentIndex = index;
-        document.getElementById('lesson-title').innerText = lessons[index].title;
-        display.innerHTML = '';
-        lessons[index].text.split('').forEach((char, i) => {
-            const span = document.createElement('span');
-            span.innerText = char;
-            if(i === 0) span.classList.add('current');
-            display.appendChild(span);
-        });
-        input.value = '';
-        updateHand(lessons[index].text[0]);
-        renderSidebar();
+    function loadLesson(idx) {
+        curIdx = idx;
+        document.getElementById('lesson-title').innerText = lessons[idx].t;
+        document.getElementById('text-display').innerHTML = lessons[idx].c.split('').map((c,i) => `<span class="${i===0?'char-next':''}">${c}</span>`).join('');
+        document.getElementById('type-input').value = '';
+        document.querySelectorAll('.lesson-btn').forEach((b,i) => b.className = i===idx?'lesson-btn active':'lesson-btn');
+        updateGuide(lessons[idx].c[0]);
+        startTime = null;
     }
 
-    function updateHand(char) {
-        // Highlight Key
-        document.querySelectorAll('.key').forEach(k => k.classList.remove('active'));
-        let targetKey = document.querySelector(`.key[data-char="${char}"]`);
-        
-        // Highlight Finger
-        document.querySelectorAll('.finger').forEach(f => f.classList.remove('active-finger'));
-        
-        let fingerId = fingerMap[char];
-        
-        // Check if shift is needed
-        if(!targetKey) {
-            targetKey = document.querySelector(`.key[data-shift="${char}"]`);
-            if(targetKey) {
-                document.getElementById('key-shift').classList.add('active');
-                document.getElementById('L5').classList.add('active-finger'); // Use left pinky for shift
+    function updateGuide(char) {
+        document.querySelectorAll('.key, .finger-tip').forEach(el => el.classList.remove('active'));
+        let target = document.querySelector(`.key[data-n="${char}"]`);
+        if(!target) {
+            target = document.querySelector(`.key[data-s="${char}"]`);
+            if(target) {
+                document.getElementById('sh-left').classList.add('active');
+                document.getElementById('L5').classList.add('active');
             }
         }
-        
-        if(targetKey) targetKey.classList.add('active');
-        if(fingerId) document.getElementById(fingerId).classList.add('active-finger');
+        if(target) target.classList.add('active');
+        const fId = fingerMap[char];
+        if(fId) document.getElementById(fId).classList.add('active');
     }
 
-    input.addEventListener('input', () => {
-        const chars = display.querySelectorAll('span');
-        const inputVal = input.value.split('');
-
-        chars.forEach((span, i) => {
-            span.classList.remove('current', 'correct', 'incorrect');
-            if (inputVal[i] == null) {
-                if(i === inputVal.length) span.classList.add('current');
-            } else if (inputVal[i] === span.innerText) {
-                span.classList.add('correct');
-            } else {
-                span.classList.add('incorrect');
-            }
+    document.getElementById('type-input').addEventListener('input', (e) => {
+        if(!startTime) startTime = new Date();
+        const val = e.target.value;
+        const text = lessons[curIdx].c;
+        const spans = document.getElementById('text-display').querySelectorAll('span');
+        
+        spans.forEach((s, i) => {
+            s.className = (val[i] == null) ? (i === val.length ? 'char-next' : '') : (val[i] === s.innerText ? 'char-correct' : 'char-wrong');
         });
 
-        // Update Hand Guide for next character
-        if(input.value.length < lessons[currentIndex].text.length) {
-            updateHand(lessons[currentIndex].text[input.value.length]);
-        }
+        updateGuide(text[val.length] || '');
+        
+        const elapsed = (new Date() - startTime) / 60000;
+        document.getElementById('wpm').innerText = Math.round((val.length / 5) / elapsed) || 0;
 
-        // Auto next lesson
-        if(input.value === lessons[currentIndex].text) {
-            setTimeout(() => { if(currentIndex < lessons.length - 1) loadLesson(currentIndex + 1); }, 500);
+        if(val === text) {
+            alert("အောင်မြင်ပါတယ်။ နောက်သင်ခန်းစာသို့ သွားပါမည်။");
+            loadLesson((curIdx + 1) % lessons.length);
         }
     });
 
-    function renderSidebar() {
-        const list = document.getElementById('lesson-list');
-        list.innerHTML = '';
-        lessons.forEach((l, i) => {
-            const div = document.createElement('div');
-            div.className = `lesson-item ${i === currentIndex ? 'active' : ''}`;
-            div.innerText = `${i + 1}. ${l.title}`;
-            div.onclick = () => loadLesson(i);
-            list.appendChild(div);
-        });
-    }
-
-    createKeyboard();
-    loadLesson(0);
+    init();
 </script>
 </body>
 </html>
