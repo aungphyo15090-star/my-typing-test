@@ -3,184 +3,177 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUNG PHYO WIN - Typing Master Pro</title>
+    <title>AUNG PHYO WIN - Full Professional Typing Master</title>
     <link href="https://mmwebfonts.comquas.com/fonts/pyidaungsu.css" rel="stylesheet">
     <style>
-        :root { --main: #1a1c2c; --accent: #ff4757; --bg: #f0f2f5; --white: #ffffff; }
-        body { font-family: 'Pyidaungsu', sans-serif; background: var(--bg); margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        :root { --main: #0f172a; --accent: #38bdf8; --white: #ffffff; --key: #f8fafc; }
+        body { font-family: 'Pyidaungsu', sans-serif; background: #020617; margin: 0; color: white; display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
 
-        /* Lock Screen */
-        #lock-screen { position: fixed; inset: 0; background: #000; z-index: 10000; display: flex; justify-content: center; align-items: center; color: white; }
-        .lock-box { background: #1a1c2c; padding: 50px; border-radius: 20px; border: 2px solid var(--accent); text-align: center; }
-        .lock-box input { padding: 12px; font-size: 20px; border-radius: 8px; border: none; width: 250px; text-align: center; margin: 20px 0; }
-        .lock-box button { background: var(--accent); color: white; padding: 12px 40px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        /* Security Lock */
+        #lock { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; justify-content: center; align-items: center; }
+        .lock-card { background: #1e293b; padding: 40px; border-radius: 20px; border: 2px solid var(--accent); text-align: center; box-shadow: 0 0 30px rgba(56, 189, 248, 0.2); }
+        .lock-card input { padding: 12px; font-size: 18px; border-radius: 8px; border: none; width: 220px; margin: 20px 0; text-align: center; }
+        .lock-card button { background: var(--accent); color: #000; padding: 12px 40px; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; }
 
-        /* Sidebar */
-        .sidebar { width: 320px; background: var(--main); color: white; display: flex; flex-direction: column; box-shadow: 5px 0 15px rgba(0,0,0,0.2); }
-        .sidebar-header { padding: 25px; background: #111420; border-bottom: 4px solid var(--accent); text-align: center; }
-        .lesson-list { flex: 1; overflow-y: auto; padding: 10px; }
-        .lesson-btn { width: 100%; padding: 12px; margin-bottom: 6px; background: rgba(255,255,255,0.05); border: none; color: #a5b1c2; border-radius: 8px; cursor: pointer; text-align: left; font-size: 13px; }
-        .lesson-btn.active { background: var(--accent); color: white; font-weight: bold; }
+        /* Header */
+        .header { padding: 15px 25px; background: #1e293b; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; }
+        .stats { display: flex; gap: 20px; font-weight: bold; }
+        .time-select { background: #334155; color: white; border: 1px solid var(--accent); padding: 5px; border-radius: 5px; }
 
-        /* Main App */
-        .main { flex: 1; padding: 20px; display: flex; flex-direction: column; align-items: center; overflow-y: auto; }
-        .card { background: var(--white); width: 100%; max-width: 1200px; padding: 35px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); }
-        
-        /* Time Toggle */
-        .timer-ctrl { display: flex; gap: 10px; margin-bottom: 20px; justify-content: flex-end; }
-        .time-btn { padding: 8px 20px; border: 1px solid #ddd; border-radius: 5px; cursor: pointer; background: #fff; }
-        .time-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
+        /* Layout */
+        .container { flex: 1; display: flex; overflow: hidden; padding: 15px; gap: 15px; }
+        .sidebar { width: 300px; background: #1e293b; border-radius: 12px; overflow-y: auto; padding: 10px; }
+        .lesson-link { padding: 12px; margin-bottom: 5px; background: rgba(255,255,255,0.05); border-radius: 8px; cursor: pointer; font-size: 13px; transition: 0.2s; }
+        .lesson-link.active { background: var(--accent); color: #000; font-weight: bold; }
+        .category-tag { font-size: 11px; color: var(--accent); padding: 10px 5px 5px; text-transform: uppercase; display: block; border-bottom: 1px solid #334155; margin-bottom: 5px; }
 
-        #display-text { font-size: 26px; line-height: 2.2; padding: 30px; background: #fafafa; border: 1px solid #eee; border-radius: 15px; margin-bottom: 20px; text-align: justify; color: #2d3436; min-height: 300px; }
-        .curr { border-bottom: 4px solid var(--accent); background: #fff5f5; }
-        .ok { color: #2ed573; }
-        .err { background: #ff4757; color: white; border-radius: 4px; }
+        .editor-section { flex: 1; display: flex; flex-direction: column; gap: 15px; }
+        #display-screen { flex: 1; background: white; color: #1e293b; border-radius: 15px; padding: 25px; font-size: 24px; line-height: 2.2; overflow-y: auto; text-align: justify; border: 4px solid #334155; }
+        .curr-char { border-bottom: 4px solid var(--accent); background: #e0f2fe; }
+        .is-correct { color: #10b981; }
+        .is-wrong { background: #ef4444; color: white; border-radius: 4px; }
 
-        input#user-input { width: 100%; padding: 20px; font-size: 24px; border: 2px solid #dfe6e9; border-radius: 12px; outline: none; margin-bottom: 20px; font-family: 'Pyidaungsu'; }
+        input#input-field { width: 100%; padding: 18px; font-size: 22px; border-radius: 12px; border: 2px solid #334155; background: #1e293b; color: white; outline: none; font-family: 'Pyidaungsu'; }
 
-        /* Full Keyboard Layout (As per Image) */
-        .kb { background: #2d3436; padding: 20px; border-radius: 15px; width: 100%; box-shadow: inset 0 0 20px #000; }
-        .kb-row { display: flex; justify-content: center; gap: 5px; margin-bottom: 6px; }
-        .k { background: #fdfdfd; min-width: 50px; height: 55px; border-radius: 8px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 16px; font-weight: bold; border-bottom: 5px solid #bdc3c7; color: #2d3436; position: relative; transition: 0.1s; }
-        .k.active { background: var(--accent); color: white; border-bottom: none; transform: translateY(4px); }
-        .k .sh { position: absolute; top: 3px; left: 5px; font-size: 11px; color: #95a5a6; }
-        .k.wide { min-width: 90px; }
-        .k.space { min-width: 400px; }
+        /* Full Physical Keyboard (F1-F12 + All Keys) */
+        .full-kb { background: #334155; padding: 15px; border-radius: 15px; border: 2px solid #475569; }
+        .kb-row { display: flex; justify-content: center; gap: 4px; margin-bottom: 5px; }
+        .k { background: #f1f5f9; color: #1e293b; min-width: 44px; height: 48px; border-radius: 6px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 14px; font-weight: bold; position: relative; border-bottom: 4px solid #94a3b8; transition: 0.1s; }
+        .k.active { background: var(--accent); border-bottom: none; transform: translateY(4px); color: black; }
+        .k.special { background: #cbd5e1; font-size: 11px; }
+        .k.fn { height: 35px; background: #94a3b8; font-size: 10px; }
+        .k.wide { min-width: 80px; }
+        .k.space { min-width: 350px; }
+        .sh-val { position: absolute; top: 2px; left: 4px; font-size: 10px; color: #64748b; }
 
-        .service { margin-top: 30px; text-align: center; background: #f1f2f6; padding: 15px; border-radius: 10px; font-size: 15px; }
-        .service a { color: #eb4d4b; text-decoration: none; font-weight: bold; }
+        .support-footer { text-align: center; padding: 10px; font-size: 14px; background: #1e293b; border-radius: 10px; }
+        .support-footer a { color: var(--accent); font-weight: bold; text-decoration: none; }
     </style>
 </head>
 <body>
 
-<div id="lock-screen">
-    <div class="lock-box">
-        <h1>AUNG PHYO WIN</h1>
-        <p>Type Password to Enter</p>
-        <input type="password" id="pass" placeholder="Password">
-        <br>
-        <button onclick="unlock()">UNLOCK</button>
+<div id="lock">
+    <div class="lock-card">
+        <h1 style="margin:0">AUNG PHYO WIN</h1>
+        <p style="opacity:0.7">Enter Security Code to Access</p>
+        <input type="password" id="p-word" placeholder="Password"> <br>
+        <button onclick="unlock()">UNLOCK SYSTEM</button>
     </div>
 </div>
 
-<div class="sidebar">
-    <div class="sidebar-header">
-        <h2 style="color:var(--accent); margin:0;">MASTER KEY</h2>
-        <small>by Aung Phyo Win</small>
+<div class="header">
+    <div style="font-size: 18px;"><b>MASTER TYPING PRO:</b> <span id="l-title" style="color:var(--accent)">-</span></div>
+    <div class="stats">
+        <div>WPM: <span id="wpm">0</span></div>
+        <div>Time: <select class="time-select" id="time-limit"><option value="60">60s</option><option value="120">120s</option></select></div>
+        <div>Clock: <span id="timer" style="color:var(--accent)">60</span>s</div>
     </div>
-    <div class="lesson-list" id="nav"></div>
 </div>
 
-<div class="main">
-    <div class="card">
-        <div class="timer-ctrl">
-            <button class="time-btn active" onclick="setTime(60, this)">60s</button>
-            <button class="time-btn" onclick="setTime(120, this)">120s</button>
-            <div style="margin-left: 20px; font-weight: bold;">ကျန်ရှိချိန်: <span id="clock">60</span>s</div>
-        </div>
+<div class="container">
+    <div class="sidebar" id="lesson-nav"></div>
+    <div class="editor-section">
+        <div id="display-screen"></div>
+        <input type="text" id="input-field" placeholder="စာသားများကို ဤနေရာတွင် စတင်ရိုက်နှိပ်ပါ..." autocomplete="off">
+        
+        <div class="full-kb" id="kb-engine"></div>
 
-        <div id="display-text"></div>
-        <input type="text" id="user-input" placeholder="စတင်ရိုက်နှိပ်ပါ..." autocomplete="off">
-
-        <div class="kb" id="kb-ui"></div>
-
-        <div class="service">
-            Customer Support: <a href="mailto:aungphyo52967@gmail.com">aungphyo52967@gmail.com</a>
+        <div class="support-footer">
+            📧 Customer Support: <a href="mailto:aungphyo52967@gmail.com">aungphyo52967@gmail.com</a>
         </div>
     </div>
 </div>
 
 <script>
     function unlock() {
-        if(document.getElementById('pass').value === "aungphyo529") {
-            document.getElementById('lock-screen').style.display = 'none';
-        } else { alert("မှားယွင်းနေပါသည်။"); }
+        if(document.getElementById('p-word').value === "aungphyo529") document.getElementById('lock').style.display='none';
+        else alert("Password မှားယွင်းနေပါသည်။");
     }
 
-    let timeLeft = 60;
-    let timerInterval = null;
+    const dataSet = [];
+    const p1 = "ကကြီး ကလေး ငို၊ ကိုကို ချော့လို့ နို့စို့စို့။ ခကွေး ကွေးကွေး၊ ခွေးကလေးကို ကျွေးကျွေး။ ဂငယ် ငယ်ငယ်၊ ငါးကလေး ဖမ်းမယ်။ ဃကြီး ကြီးမား၊ ဆင်ကြီး သွား။ င ကလေး ငြိမ်ငြိမ်၊ အိမ်မှာ ထိုင်။ စလုံး လုံးလုံး၊ ထမင်းလုံးကို စား။ ဆလိမ် လိမ်လိမ်၊ ကြိုးကလေးကို လိမ်။ ဇကွဲ ကွဲကွဲ၊ အိုးကလေး ကွဲ။ ဈမျဉ်းဆွဲ ဆွဲ၊ စာကြောင်း ဆွဲ။ ညလေး လေးလေး၊ ကလေးငယ် လေး။ ဋသန်လျင်းချိတ် ချိတ်၊ တံငါသည် ချိတ်။ ဌဝမ်းဘဲ ဘဲ၊ ရေထဲမှာ ဘဲ။ ဍရင်ကောက် ကောက်၊ လမ်းကလေး ကောက်။ ဎရေမှုတ် မှုတ်၊ ရေကို မှုတ်။ ဏကြီး ကြီးမား၊ ဂုဏ်အင်္ဂါ များ။ တဝမ်းပူ ပူ။";
+    const historyLong = "မြန်မာနိုင်ငံ၏ သမိုင်းကြောင်းသည် ပျူခေတ်၊ ပုဂံခေတ်များမှ စတင်ခဲ့ပြီး အနော်ရထာမင်းကြီးသည် ပထမမြန်မာနိုင်ငံတော်ကြီးကို တည်ထောင်ခဲ့ပါသည်။ ပုဂံခေတ်တွင် ဗုဒ္ဓဘာသာ ထွန်းကားခဲ့ပြီး ထောင်သောင်းချီသော ဘုရားပုထိုးများ တည်ထားခဲ့သည်။ ထို့နောက် အင်းဝ၊ တောင်ငူ နှင့် ကုန်းဘောင်ခေတ်များအထိ မြန်မာ့အင်ပါယာသည် အရှေ့တောင်အာရှတွင် အင်အားကြီးမားခဲ့သည်။ အမျိုးသားခေါင်းဆောင်ကြီး ဗိုလ်ချုပ်အောင်ဆန်းနှင့်တကွ အာဇာနည်များ၏ ကြိုးပမ်းမှုကြောင့် ၁၉၄၈ ခုနှစ်တွင် လွတ်လပ်ရေး ရရှိခဲ့သည်။";
+    const citiesLong = "ရန်ကုန်မြို့သည် မြန်မာနိုင်ငံ၏ စီးပွားရေးမြို့တော်ဖြစ်ပြီး ရွှေတိဂုံစေတီတော်မြတ်ကြီးမှာ မြို့၏ သင်္ကေတဖြစ်သည်။ မန္တလေးမြို့သည် မြန်မာ့ယဉ်ကျေးမှု၏ ဗဟိုချက်ဖြစ်ပြီး နောက်ဆုံးမင်းဆက်များ နန်းစိုက်ခဲ့သည်။ နေပြည်တော်သည် လက်ရှိအုပ်ချုပ်ရေးမြို့တော်ဖြစ်ပြီး ခေတ်မှီတည်ဆောက်ထားသည်။ တောင်ကြီးမြို့သည် ရှမ်းပြည်နယ်၏ မြို့တော်ဖြစ်ပြီး အေးမြသော ရာသီဥတုရှိသည်။ မော်လမြိုင်၊ ပုသိမ်၊ စစ်တွေ နှင့် မြစ်ကြီးနားမြို့များသည်လည်း အရေးပါသော မြို့ကြီးများ ဖြစ်ကြသည်။";
+    const songsLong = "မြန်မာပြည်ကြီး ငြိမ်းချမ်းပါစေ၊ တို့မြေ တို့ရေ တို့ချစ်တဲ့မြေ။ သာယာလှပတဲ့ တောတောင်ရေမြေများနဲ့ ပြည့်စုံတဲ့ မြန်မာပြည်ကြီးမှာ တို့အားလုံး စည်းစည်းလုံးလုံး နေထိုင်ကြမယ်။ ကမ္ဘာတည်သရွေ့ မြန်မာပြည်သည် တို့ရဲ့ အမိမြေ ဖြစ်ပါသည်။ သွေးချင်းတို့ရဲ့ အချစ်များဖြင့် တည်ဆောက်ထားသော နိုင်ငံတော်ကြီး ဖြစ်ပါသည်။ တို့နိုင်ငံ တို့လူမျိုး တို့စာပေ တို့ဂုဏ်ရည်။";
 
-    function setTime(s, btn) {
-        timeLeft = s;
-        document.getElementById('clock').innerText = s;
-        document.querySelectorAll('.time-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
-        resetLesson();
+    // Build 1-150 Lessons
+    for(let i=1; i<=150; i++){
+        let cat = i<=20 ? "ဗျည်းသင်ခန်းစာ" : i<=50 ? "မြန်မာ့သမိုင်း" : i<=100 ? "မြို့ကြီးများ" : "သီချင်းစာသား";
+        let txt = i<=20 ? p1 : i<=50 ? historyLong : i<=100 ? citiesLong : songsLong;
+        dataSet.push({ title: `အခန်း ${i}: ${cat}`, text: txt + ` (အခန်း ${i} လေ့ကျင့်ခန်းဖြစ်ပြီး စာလုံးများကို တိကျစွာ ရိုက်နှိပ်ရန် ကြိုးစားပါ။)` });
     }
-
-    const lessons = [];
-    const poemLong = "ကကြီး ကလေး ငို၊ ကိုကို ချော့လို့ နို့စို့စို့။ ခကွေး ကွေးကွေး၊ ခွေးကလေးကို ကျွေးကျွေး။ ဂငယ် ငယ်ငယ်၊ ငါးကလေး ဖမ်းမယ်။ ဃကြီး ကြီးမား၊ ဆင်ကြီး သွား။ င ကလေး ငြိမ်ငြိမ်၊ အိမ်မှာ ထိုင်။ စလုံး လုံးလုံး၊ ထမင်းလုံးကို စား။ ဆလိမ် လိမ်လိမ်၊ ကြိုးကလေးကို လိမ်။ ဇကွဲ ကွဲကွဲ၊ အိုးကလေး ကွဲ။ ဈမျဉ်းဆွဲ ဆွဲ၊ စာကြောင်း ဆွဲ။ ညလေး လေးလေး၊ ကလေးငယ် လေး။ ဋသန်လျင်းချိတ် ချိတ်၊ တံငါသည် ချိတ်။ ဌဝမ်းဘဲ ဘဲ၊ ရေထဲမှာ ဘဲ။ ဍရင်ကောက် ကောက်၊ လမ်းကလေး ကောက်။ ဎရေမှုတ် မှုတ်၊ ရေကို မှုတ်။ ဏကြီး ကြီးမား၊ ဂုဏ်အင်္ဂါ များ။ တဝမ်းပူ ပူ၊ ထမင်းိုး ပူ။ ထဆင်ထူး ထူး၊ ထူးထူး ခြားခြား။ ဒဒွေး ဒွေးဒွေး၊ ဒေါ်ဒေါ် ပေး။ ဓအလံထူ ထူ၊ အလံကို ထူ။ နငယ် ငယ်ငယ်၊ ညီမလေး ငယ်။ အ အအေး၊ အအေးကို သောက်။";
-
-    // 1-20 Alphabet
-    for(let i=1; i<=20; i++) lessons.push({ title: `အခန်း ${i}: ဗျည်းကဗျာရှည်`, text: poemLong + " ဤသည်မှာ မြန်မာစာ၏ အခြေခံဗျည်းများ ဖြစ်ပါသည်။" });
-    // 21-50 History
-    for(let i=21; i<=50; i++) lessons.push({ title: `အခန်း ${i}: မြန်မာ့သမိုင်း`, text: "မြန်မာနိုင်ငံ၏ သမိုင်းကြောင်းသည် ပုဂံခေတ်မှ စတင်၍ ကြီးကျယ်ခမ်းနားခဲ့ပါသည်။ အနော်ရထာမင်းကြီးသည် ပထမမြန်မာနိုင်ငံတော်ကြီးကို တည်ထောင်ခဲ့ပြီး ဗုဒ္ဓဘာသာကို ထွန်းကားစေခဲ့သည်။ အင်းဝ၊ တောင်ငူ နှင့် ကုန်းဘောင်ခေတ်များအထိ မြန်မာ့စစ်အင်အားနှင့် ယဉ်ကျေးမှုတို့သည် အရှေ့တောင်အာရှတွင် ထင်ရှားခဲ့ပါသည်။" });
-    // 51-100 Cities
-    for(let i=51; i<=100; i++) lessons.push({ title: `အခန်း ${i}: မြန်မာပြည်မှမြို့များ`, text: "ရန်ကုန်မြို့သည် စီးပွားရေးမြို့တော်ဖြစ်ပြီး ရွှေတိဂုံစေတီတော်ကြီး တည်ရှိပါသည်။ မန္တလေးမြို့သည် ယဉ်ကျေးမှုမြို့တော်ဖြစ်ပြီး နန်းမြို့ဟောင်း ရှိပါသည်။ နေပြည်တော်သည် အုပ်ချုပ်ရေးမြို့တော်ဖြစ်ပြီး ကျယ်ဝန်းသော လမ်းမကြီးများ ရှိပါသည်။ တောင်ကြီး၊ မော်လမြိုင်၊ ပုသိမ် နှင့် မြစ်ကြီးနားမြို့များသည်လည်း အလှအပများဖြင့် ပြည့်နှက်နေပါသည်။" });
-    // 101-150 Songs
-    for(let i=101; i<=150; i++) lessons.push({ title: `အခန်း ${i}: သီချင်းစာသားများ`, text: "မြန်မာပြည်ကြီး ငြိမ်းချမ်းပါစေ၊ တို့မြေ တို့ရေ တို့ချစ်တဲ့မြေ။ သာယာလှပတဲ့ တောတောင်ရေမြေများနဲ့ ပြည့်စုံတဲ့ မြန်မာပြည်ကြီးမှာ တို့အားလုံး စည်းစည်းလုံးလုံး နေထိုင်ကြမယ်။ ကမ္ဘာတည်သရွေ့ မြန်မာပြည်သည် တို့ရဲ့ အမိမြေ ဖြစ်ပါသည်။" });
 
     const kbRows = [
-        [{n:'ဆ',s:'ဍ'},{n:'တ',s:'ဋ'},{n:'န',s:'ဏ'},{n:'မ',s:'ဣ'},{n:'အ',s:'ဤ'},{n:'ပ',s:'ဥ'},{n:'က',s:'ဦ'},{n:'င',s:'ဧ'},{n:'သ',s:'သြ'},{n:'စ',s:'၌'}],
-        [{n:'ေ',s:'ဗ'},{n:'ှ',s:'ှ'},{n:'ိ',s:'ီ'},{n:'်',s:'်'},{n:'ါ',s:'ာ'},{n:'့',s:'့'},{n:'ြ',s:'ွ'},{n:'ု',s:'ူ'},{n:'ူ',s:'ူး'},{n:'း',s:'၏'}],
-        [{n:'ဖ',s:'ဃ'},{n:'ထ',s:'ဌ'},{n:'ခ',s:'ခြ'},{n:'လ',s:'ဠ'},{n:'ဘ',s:'ဘ'},{n:'ည',s:'ည'},{n:'ာ',s:'ါ'},{n:'ယ',s:'၌'},{n:'ဝ',s:'၎'}]
+        ['Esc','F1','F2','F3','F4','F5','F6','F7','F8','F9','F10','F11','F12'],
+        [{n:'`',s:'~'},{n:'၁',s:'!'},{n:'၂',s:'@'},{n:'၃',s:'#'},{n:'၄',s:'$'},{n:'၅',s:'%'},{n:'၆',s:'^'},{n:'၇',s:'&'},{n:'၈',s:'*'},{n:'၉',s:'('},{n:'၀',s:')'},{n:'-',s:'_'},{n:'=',s:'+'},{n:'Bksp',w:true}],
+        [{n:'Tab',w:true},{n:'ဆ',s:'ဍ'},{n:'တ',s:'ဋ'},{n:'န',s:'ဏ'},{n:'မ',s:'ဣ'},{n:'အ',s:'ဤ'},{n:'ပ',s:'ဥ'},{n:'က',s:'ဦ'},{n:'င',s:'ဧ'},{n:'သ',s:'သြ'},{n:'စ',s:'၌'},{n:'[',s:'{'},{n:']',s:'}'},{n:'\\',s:'|'}],
+        [{n:'Caps',w:true},{n:'ေ',s:'ဗ'},{n:'ှ',s:'ှ'},{n:'ိ',s:'ီ'},{n:'်',s:'်'},{n:'ါ',s:'ာ'},{n:'့',s:'့'},{n:'ြ',s:'ွ'},{n:'ု',s:'ူ'},{n:'ူ',s:'ူး'},{n:'း',s:'၏'},{n:'Enter',w:true}],
+        [{n:'Shift',w:true},{n:'ဖ',s:'ဃ'},{n:'ထ',s:'ဌ'},{n:'ခ',s:'ခြ'},{n:'လ',s:'ဠ'},{n:'ဘ',s:'ဘ'},{n:'ည',s:'ည'},{n:'ာ',s:'ါ'},{n:'ယ',s:'၌'},{n:'ဝ',s:'၎'},{n:'Shift',w:true}],
+        [{n:'Ctrl',w:true},{n:'Win',w:true},{n:'Alt',w:true},{n:' ', sp:true},{n:'Alt',w:true},{n:'Win',w:true},{n:'Menu',w:true},{n:'Ctrl',w:true}]
     ];
 
-    let currentIdx = 0;
+    let currentL = 0, timerObj = null, timeL = 60;
 
-    function init() {
-        const nav = document.getElementById('nav');
-        lessons.forEach((l, i) => {
-            const b = document.createElement('button'); b.className = 'lesson-btn'; b.innerText = l.title;
-            b.onclick = () => loadLesson(i); nav.appendChild(b);
+    function build() {
+        const nav = document.getElementById('lesson-nav');
+        let currentCat = "";
+        dataSet.forEach((l, i) => {
+            let cat = i<20 ? "Alphabet" : i<50 ? "History" : i<100 ? "Cities" : "Songs";
+            if(cat !== currentCat) {
+                const t = document.createElement('span'); t.className='category-tag'; t.innerText = cat; nav.appendChild(t);
+                currentCat = cat;
+            }
+            const b = document.createElement('div'); b.className='lesson-link'; b.innerText=l.title; b.onclick=()=>loadL(i); nav.appendChild(b);
         });
 
-        const kb = document.getElementById('kb-ui');
-        kbRows.forEach(row => {
-            const rDiv = document.createElement('div'); rDiv.className = 'kb-row';
-            row.forEach(k => rDiv.innerHTML += `<div class="k" data-n="${k.n}" data-s="${k.s}"><span class="sh">${k.s}</span>${k.n}</div>`);
+        const kb = document.getElementById('kb-engine');
+        kbRows.forEach((row, ri) => {
+            const rDiv = document.createElement('div'); rDiv.className='kb-row';
+            row.forEach(k => {
+                const keyDiv = document.createElement('div');
+                keyDiv.className = `k ${ri===0?'fn':''} ${k.w?'wide':''} ${k.sp?'space':''}`;
+                keyDiv.dataset.n = k.n || k; if(k.s) keyDiv.dataset.s = k.s;
+                keyDiv.innerHTML = `${k.s?`<span class="sh-val">${k.s}</span>`:''}${k.n || k}`;
+                rDiv.appendChild(keyDiv);
+            });
             kb.appendChild(rDiv);
         });
-        kb.innerHTML += `<div class="kb-row"><div class="k space" data-n=" ">SPACE</div></div>`;
-        loadLesson(0);
+        loadL(0);
     }
 
-    function loadLesson(idx) {
-        currentIdx = idx;
-        document.getElementById('display-text').innerHTML = lessons[idx].text.split('').map((c,i) => `<span class="${i===0?'curr':''}">${c}</span>`).join('');
-        document.getElementById('user-input').value = '';
-        document.querySelectorAll('.lesson-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
-        clearInterval(timerInterval);
-        document.getElementById('clock').innerText = timeLeft;
-        updateKB(lessons[idx].text[0]);
+    function loadL(idx) {
+        currentL = idx;
+        document.getElementById('l-title').innerText = dataSet[idx].title;
+        document.getElementById('display-screen').innerHTML = dataSet[idx].text.split('').map((c,i)=>`<span class="${i===0?'curr-char':''}">${c}</span>`).join('');
+        document.getElementById('input-field').value = '';
+        document.querySelectorAll('.lesson-link').forEach((b,i)=>b.classList.toggle('active', i===idx));
+        clearInterval(timerObj); timerObj = null;
+        timeL = document.getElementById('time-limit').value;
+        document.getElementById('timer').innerText = timeL;
+        highlight(dataSet[idx].text[0]);
     }
 
-    function resetLesson() { loadLesson(currentIdx); }
-
-    function updateKB(c) {
+    function highlight(c) {
         document.querySelectorAll('.k').forEach(k => k.classList.remove('active'));
-        let target = document.querySelector(`.k[data-n="${c}"]`) || document.querySelector(`.k[data-s="${c}"]`);
+        const target = [...document.querySelectorAll('.k')].find(k => k.dataset.n === c || k.dataset.s === c);
         if(target) target.classList.add('active');
     }
 
-    document.getElementById('user-input').addEventListener('input', (e) => {
-        const val = e.target.value, text = lessons[currentIdx].text, spans = document.getElementById('display-text').querySelectorAll('span');
-        
-        if(!timerInterval && val.length > 0) {
-            let s = parseInt(document.getElementById('clock').innerText);
-            timerInterval = setInterval(() => {
-                s--;
-                document.getElementById('clock').innerText = s;
-                if(s <= 0) { clearInterval(timerInterval); alert("အချိန်စေ့သွားပါပြီ!"); resetLesson(); }
+    document.getElementById('input-field').addEventListener('input', (e) => {
+        if(!timerObj) {
+            timerObj = setInterval(() => {
+                timeL--; document.getElementById('timer').innerText = timeL;
+                if(timeL <= 0) { clearInterval(timerObj); alert("Time's Up!"); loadL(currentL); }
             }, 1000);
         }
-
-        spans.forEach((s, i) => s.className = (val[i] == null) ? (i === val.length ? 'curr' : '') : (val[i] === s.innerText ? 'ok' : 'err'));
-        updateKB(text[val.length] || '');
-        if(val === text) { if(currentIdx < 149) loadLesson(currentIdx+1); }
+        const val = e.target.value, text = dataSet[currentL].text, spans = document.getElementById('display-screen').querySelectorAll('span');
+        spans.forEach((s,i) => s.className = (val[i]==null)?(i===val.length?'curr-char':''):(val[i]===s.innerText?'is-correct':'is-wrong'));
+        highlight(text[val.length] || '');
+        document.getElementById('wpm').innerText = Math.round((val.length/5)/((document.getElementById('time-limit').value - timeL)/60)) || 0;
+        if(val === text) { if(currentL < 149) loadL(currentL+1); }
     });
 
-    init();
+    build();
 </script>
 </body>
-</html>
+</html>        
