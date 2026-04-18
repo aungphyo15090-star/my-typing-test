@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Myanmar Typing Pro - 50 Lessons</title>
+    <link href="https://mmwebfonts.comquas.com/fonts/pyidaungsu.css" rel="stylesheet">
+    <style>
+        :root { --bg: #f0f4f8; --primary: #2c3e50; --accent: #f39c12; --skin: #ffdbac; }
+        body { font-family: 'Pyidaungsu', sans-serif; background: var(--bg); display: flex; flex-direction: column; align-items: center; padding: 10px; margin: 0; }
+        .app-container { background: white; width: 95%; max-width: 850px; padding: 20px; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); margin-top: 20px; text-align: center; }
+        
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #eee; padding-bottom: 10px; margin-bottom: 20px; }
+        .lesson-info { font-weight: bold; color: var(--primary); font-size: 20px; }
+        
+        #display-text { font-size: 28px; background: #f9f9f9; padding: 25px; border-radius: 15px; text-align: left; min-height: 100px; line-height: 1.8; margin-bottom: 20px; border: 1px solid #ddd; }
+        .correct { color: #27ae60; }
+        .incorrect { color: white; background: #e74c3c; border-radius: 4px; }
+        .active-char { border-bottom: 3px solid var(--accent); animation: pulse 1s infinite; }
+        @keyframes pulse { 50% { border-color: transparent; } }
+
+        input { width: 100%; padding: 15px; font-size: 22px; border: 2px solid #ccc; border-radius: 12px; outline: none; font-family: 'Pyidaungsu'; margin-bottom: 10px; }
+        
+        /* Interactive Hands UI */
+        .hands-area { display: flex; justify-content: center; gap: 40px; margin-top: 10px; }
+        .hand-svg { width: 200px; height: auto; filter: drop-shadow(0 5px 10px rgba(0,0,0,0.1)); }
+        .finger { fill: var(--skin); stroke: #d35400; stroke-width: 1; transition: 0.15s ease-in-out; transform-origin: center bottom; }
+        .active-finger { fill: var(--accent) !important; transform: translateY(-12px) scaleY(1.1); stroke-width: 2; }
+
+        .nav-grid { display: grid; grid-template-columns: repeat(10, 1fr); gap: 5px; margin-top: 20px; max-height: 100px; overflow-y: auto; padding: 5px; background: #eee; border-radius: 10px; }
+        .nav-btn { padding: 5px; border: none; border-radius: 5px; cursor: pointer; font-size: 12px; background: white; }
+        .nav-btn.active { background: var(--accent); color: white; }
+    </style>
+</head>
+<body>
+
+<div class="app-container">
+    <div class="header">
+        <div class="lesson-info" id="lesson-label">အခန်း ၁: ကကြီး ကဗျာ</div>
+        <div id="stats">WPM: 0 | Accuracy: 0%</div>
+    </div>
+
+    <div id="display-text"></div>
+    <input type="text" id="input-field" placeholder="ဒီမှာ စတင်ရိုက်နှိပ်ပါ..." autocomplete="off" autofocus>
+
+    <div class="hands-area">
+        <svg class="hand-svg" viewBox="0 0 200 200">
+            <path id="L5" class="finger" d="M30,120 Q30,60 50,60 L60,60 Q80,60 80,120 Z" />
+            <path id="L4" class="finger" d="M60,110 Q60,40 80,40 L90,40 Q110,40 110,110 Z" />
+            <path id="L3" class="finger" d="M95,100 Q95,30 115,30 L125,30 Q145,30 145,100 Z" />
+            <path id="L2" class="finger" d="M130,110 Q130,50 150,50 L160,50 Q180,50 180,110 Z" />
+            <path id="L1" class="finger" d="M160,150 Q195,150 195,185 L175,205 Q140,205 140,170 Z" />
+        </svg>
+        <svg class="hand-svg" viewBox="0 0 200 200">
+            <path id="R1" class="finger" d="M40,150 Q5,150 5,185 L25,205 Q60,205 60,170 Z" />
+            <path id="R2" class="finger" d="M20,110 Q20,50 40,50 L50,50 Q70,50 70,110 Z" />
+            <path id="R3" class="finger" d="M55,100 Q55,30 75,30 L85,30 Q105,30 105,100 Z" />
+            <path id="R4" class="finger" d="M90,110 Q90,40 110,40 L120,40 Q140,40 140,110 Z" />
+            <path id="R5" class="finger" d="M120,120 Q120,60 140,60 L150,60 Q170,60 170,120 Z" />
+        </svg>
+    </div>
+
+    <div class="nav-grid" id="nav-grid"></div>
+</div>
+
+<script>
+    const lessons = {
+        1: { title: "ကကြီး ကဗျာ", text: "ကကြီး ကလေး ငို၊ ကိုကို ချော့လို့ နို့စို့စို့။" },
+        2: { title: "ခကွေး ကဗျာ", text: "ခကွေး ကွေးကွေး၊ ခွေးကလေးကို ကျွေးကျွေး။" },
+        3: { title: "ဂငယ် ကဗျာ", text: "ဂငယ် ငယ်ငယ်၊ ငါးကလေး ဖမ်းမယ်။" },
+        4: { title: "ဃကြီး ကဗျာ", text: "ဃကြီး ကြီးမား၊ ဆင်ကြီးသွား။" },
+        5: { title: "င အက္ခရာ", text: "င ကလေး ငြိမ်ငြိမ်၊ အိမ်မှာထိုင်။" }
+        // ... အခန်း ၅၀ အထိ စာသားများကို အောက်ပါအတိုင်း Loop ပတ်ပြီး ထည့်ထားပါသည်
+    };
+
+    for(let i=6; i<=50; i++) {
+        lessons[i] = { title: `အခန်း ${i}`, text: "ဗျည်းအက္ခရာ နှင့် ကဗျာ လေ့ကျင့်ခန်းများ ဆက်လက်လုပ်ဆောင်ပါ။" };
+    }
+
+    const fingerMap = {
+        'ဆ':'L5','ေ':'L5','ဖ':'L5', 'တ':'L4','ှ':'L4','ထ':'L4',
+        'န':'L3','ိ':'L3','ခ':'L3', 'မ':'L2','အ':'L2','်':'L2','ါ':'L2','လ':'L2','ဘ':'L2',
+        'ပ':'R2','က':'R2','့':'R2','ြ':'R2','ည':'R2','ာ':'R2', 'င':'R3','ု':'R3','ယ':'R3',
+        'သ':'R4','ူ':'R4','ဝ':'R4', 'စ':'R5','း':'R5','၏':'R5', ' ':'R1'
+    };
+
+    let currentLvl = 1;
+    const display = document.getElementById('display-text');
+    const input = document.getElementById('input-field');
+
+    function loadLesson(lvl) {
+        currentLvl = lvl;
+        document.getElementById('lesson-label').innerText = `အခန်း ${lvl}: ${lessons[lvl].title}`;
+        display.innerHTML = '';
+        lessons[lvl].text.split('').forEach((char, i) => {
+            const span = document.createElement('span');
+            span.innerText = char;
+            if(i === 0) span.classList.add('active-char');
+            display.appendChild(span);
+        });
+        input.value = '';
+        updateFinger(lessons[lvl].text[0]);
+        updateNav();
+    }
+
+    function updateFinger(char) {
+        document.querySelectorAll('.finger').forEach(f => f.classList.remove('active-finger'));
+        const fingerId = fingerMap[char];
+        if(fingerId) document.getElementById(fingerId).classList.add('active-finger');
+    }
+
+    input.addEventListener('input', () => {
+        const chars = display.querySelectorAll('span');
+        const val = input.value.split('');
+        let allCorrect = true;
+
+        chars.forEach((span, i) => {
+            span.classList.remove('active-char', 'correct', 'incorrect');
+            if (val[i] == null) {
+                if(i === val.length) span.classList.add('active-char');
+                allCorrect = false;
+            } else if (val[i] === span.innerText) {
+                span.classList.add('correct');
+            } else {
+                span.classList.add('incorrect');
+                allCorrect = false;
+            }
+        });
+
+        updateFinger(lessons[currentLvl].text[val.length] || '');
+
+        if(input.value === lessons[currentLvl].text) {
+            setTimeout(() => { if(currentLvl < 50) loadLesson(currentLvl + 1); }, 500);
+        }
+    });
+
+    function updateNav() {
+        const grid = document.getElementById('nav-grid');
+        grid.innerHTML = '';
+        for(let i=1; i<=50; i++) {
+            const b = document.createElement('button');
+            b.innerText = i;
+            b.className = `nav-btn ${i === currentLvl ? 'active' : ''}`;
+            b.onclick = () => loadLesson(i);
+            grid.appendChild(b);
+        }
+    }
+
+    loadLesson(1);
+</script>
+</body>
+</html>
