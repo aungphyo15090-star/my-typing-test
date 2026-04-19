@@ -3,41 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AUNG PHYO WIN - Pro Typing Master 150</title>
+    <title>AUNG PHYO WIN - Full Keyboard Pro 150</title>
     <link href="https://mmwebfonts.comquas.com/fonts/pyidaungsu.css" rel="stylesheet">
     <style>
         :root { --main: #0f172a; --accent: #38bdf8; --p1: #f59e0b; --p2: #10b981; }
         body { font-family: 'Pyidaungsu', sans-serif; background: #020617; margin: 0; color: white; height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
         
+        /* Auth & Menu */
         #auth, #main-menu { position: fixed; inset: 0; background: #000; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .card { background: #1e293b; padding: 40px; border-radius: 20px; border: 2px solid var(--accent); text-align: center; }
-        .menu-btn { width: 300px; padding: 18px; font-size: 18px; font-weight: bold; border-radius: 12px; border: none; cursor: pointer; margin: 10px; transition: 0.3s; }
+        .card { background: #1e293b; padding: 30px; border-radius: 20px; border: 2px solid var(--accent); text-align: center; }
+        .menu-btn { width: 280px; padding: 15px; font-weight: bold; border-radius: 10px; border: none; cursor: pointer; margin: 10px; transition: 0.3s; }
         .btn-p { background: var(--accent); color: #000; }
-        .btn-b { background: var(--p1); color: #000; }
 
-        .header { padding: 10px 20px; background: #1e293b; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; }
+        /* UI Layout */
+        .header { padding: 8px 20px; background: #1e293b; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #334155; }
         .app-body { flex: 1; display: flex; overflow: hidden; }
-        .sidebar { width: 280px; background: #1e293b; overflow-y: auto; padding: 15px; border-right: 2px solid #334155; }
-        .workspace { flex: 1; padding: 15px; display: flex; flex-direction: column; gap: 10px; overflow-y: auto; }
+        .sidebar { width: 240px; background: #1e293b; overflow-y: auto; padding: 10px; border-right: 2px solid #334155; }
+        .workspace { flex: 1; padding: 10px; display: flex; flex-direction: column; gap: 8px; overflow-y: auto; }
 
-        #text-screen { flex: 1; background: white; color: #1e293b; border-radius: 12px; padding: 25px; font-size: 24px; line-height: 2.2; overflow-y: auto; text-align: justify; border: 4px solid #334155; }
+        /* Typing Screen */
+        #text-screen { flex: 1; background: white; color: #1e293b; border-radius: 10px; padding: 20px; font-size: 22px; line-height: 2; overflow-y: auto; text-align: justify; border: 3px solid #334155; font-weight: 500; }
         .curr { border-bottom: 4px solid var(--accent); background: #e0f2fe; }
-        .ok { color: #10b981; } .err { background: #ef4444; color: white; border-radius: 4px; }
-        input.field { width: 100%; padding: 18px; font-size: 22px; border-radius: 10px; background: #1e293b; color: white; border: 2px solid #334155; outline: none; }
+        .ok { color: #10b981; } .err { background: #ef4444; color: white; }
+        input.field { width: 100%; padding: 15px; font-size: 20px; border-radius: 8px; background: #1e293b; color: white; border: 2px solid #334155; outline: none; }
 
-        .battle-grid { display: none; width: 100%; gap: 15px; }
-        .p-box { flex: 1; background: #1e293b; padding: 15px; border-radius: 10px; border-top: 5px solid; }
-
-        /* Keyboard UI */
-        .kb-ui { background: #334155; padding: 10px; border-radius: 12px; border: 2px solid #475569; }
-        .row { display: flex; justify-content: center; gap: 4px; margin-bottom: 4px; }
-        .k { background: #f1f5f9; color: #1e293b; min-width: 42px; height: 48px; border-radius: 5px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 13px; font-weight: bold; position: relative; border-bottom: 3px solid #94a3b8; }
-        .k.active { background: var(--accent); border-bottom: none; transform: translateY(3px); color: black; }
-        .k.wide { min-width: 80px; } .k.space { min-width: 380px; }
-        .sh { position: absolute; top: 1px; left: 3px; font-size: 9px; color: #64748b; }
+        /* Full Keyboard Styling */
+        .kb-container { background: #334155; padding: 10px; border-radius: 12px; border: 2px solid #475569; width: fit-content; margin: 0 auto; }
+        .row { display: flex; justify-content: center; gap: 3px; margin-bottom: 3px; }
+        .k { background: #f1f5f9; color: #1e293b; min-width: 38px; height: 42px; border-radius: 4px; display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; font-weight: bold; position: relative; border-bottom: 3px solid #94a3b8; transition: 0.1s; }
+        .k.active { background: var(--accent); transform: translateY(2px); border-bottom: none; color: black; }
+        .k.wide { min-width: 65px; } .k.extra-wide { min-width: 85px; } .k.space { min-width: 300px; }
+        .k.fkey { background: #e2e8f0; height: 35px; margin-bottom: 5px; font-size: 10px; }
+        .sh { position: absolute; top: 1px; left: 3px; font-size: 8px; color: #64748b; }
 
         #res-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; justify-content: center; align-items: center; z-index: 10001; }
-        .res-card { background: #1e293b; padding: 40px; border-radius: 20px; text-align: center; border: 3px solid var(--accent); }
     </style>
 </head>
 <body>
@@ -45,28 +44,26 @@
 <div id="auth">
     <div class="card">
         <h1 style="color:var(--accent)">AUNG PHYO WIN</h1>
-        <input type="password" id="pass" placeholder="Password" style="padding:10px; border-radius:8px; text-align:center;"> <br>
-        <button class="menu-btn btn-p" onclick="login()">LOGIN</button>
+        <input type="password" id="pass" placeholder="Password" style="padding:10px; border-radius:5px; text-align:center;"> <br>
+        <button class="menu-btn btn-p" onclick="login()">ENTER SYSTEM</button>
     </div>
 </div>
 
 <div id="main-menu" style="display:none;">
-    <h1 style="color:var(--accent)">PRO TYPING SYSTEM</h1>
-    <button class="menu-btn btn-p" onclick="setMode('practice')">လေ့ကျင့်ခန်း (အခန်း ၁၅၀)</button>
-    <button class="menu-btn btn-b" onclick="setMode('battle')">ပြိုင်ပွဲ (BATTLE MODE)</button>
+    <h1 style="color:var(--accent)">PRO TYPING MASTER</h1>
+    <button class="menu-btn btn-p" onclick="setMode('practice')">လေ့ကျင့်ခန်းစမည် (အခန်း ၁၅၀)</button>
 </div>
 
 <div class="header">
-    <button onclick="location.reload()" style="background:var(--accent); border:none; padding:8px 15px; border-radius:5px; cursor:pointer; font-weight:bold;">MENU</button>
-    <div style="display:flex; gap:20px; align-items:center;">
+    <button onclick="location.reload()" style="background:var(--accent); border:none; padding:5px 15px; border-radius:5px; cursor:pointer; font-weight:bold;">MENU</button>
+    <div style="display:flex; gap:15px; align-items:center;">
         <div>WPM: <span id="wpm-display" style="color:var(--accent)">0</span></div>
-        <select id="time-limit" onchange="reset()" style="background:#1e293b; color:white; border:1px solid var(--accent); padding:5px; border-radius:5px;">
-            <option value="60">60 Seconds</option>
-            <option value="120">2 Minutes</option>
-            <option value="300">5 Minutes</option>
+        <select id="time-limit" onchange="reset()" style="background:#1e293b; color:white; border:1px solid var(--accent); padding:3px;">
+            <option value="60">1 Min</option>
+            <option value="300">5 Mins</option>
             <option value="999999">Unlimited</option>
         </select>
-        <div style="font-size:20px;">Timer: <span id="timer" style="color:var(--accent)">60</span>s</div>
+        <div>Timer: <span id="timer">60</span>s</div>
     </div>
 </div>
 
@@ -74,26 +71,24 @@
     <div class="sidebar" id="lesson-nav"></div>
     <div class="workspace">
         <div id="text-screen"></div>
-        <input type="text" id="p-in" class="field" placeholder="စာပိုဒ်ကို အပြီးထိ ရိုက်နှိပ်ပါ..." autocomplete="off">
+        <input type="text" id="p-in" class="field" placeholder="စာသားများကို စတင်ရိုက်နှိပ်ပါ..." autocomplete="off">
         
-        <div class="battle-grid" id="battle-ui">
-            <div class="p-box" style="border-color:var(--p1)">
-                <div style="color:var(--p1)">P1 (WPM: <span id="p1-wpm">0</span>)</div>
-                <input type="text" id="p1-in" class="field" placeholder="Player 1 Start...">
+        <div class="kb-container" id="kb-engine">
+            <div class="row">
+                <div class="k fkey">Esc</div><div style="width:20px;"></div>
+                <div class="k fkey">F1</div><div class="k fkey">F2</div><div class="k fkey">F3</div><div class="k fkey">F4</div><div style="width:15px;"></div>
+                <div class="k fkey">F5</div><div class="k fkey">F6</div><div class="k fkey">F7</div><div class="k fkey">F8</div><div style="width:15px;"></div>
+                <div class="k fkey">F9</div><div class="k fkey">F10</div><div class="k fkey">F11</div><div class="k fkey">F12</div>
             </div>
-            <div class="p-box" style="border-color:var(--p2)">
-                <div style="color:var(--p2)">P2 (WPM: <span id="p2-wpm">0</span>)</div>
-                <input type="text" id="p2-in" class="field" placeholder="Player 2 Start...">
-            </div>
+            <div id="main-kb-rows"></div>
         </div>
-        <div class="kb-ui" id="kb-engine"></div>
     </div>
 </div>
 
 <div id="res-modal">
-    <div class="res-card">
-        <h1 id="win-name" style="font-size:45px; color:var(--accent)">DONE!</h1>
-        <p id="win-stats" style="font-size:20px;"></p>
+    <div class="card">
+        <h1 id="win-name" style="color:var(--accent)">FINISHED!</h1>
+        <p id="win-stats"></p>
         <button class="menu-btn btn-p" onclick="location.reload()">TRY AGAIN</button>
     </div>
 </div>
@@ -105,66 +100,55 @@
         o.type = t; o.frequency.value = f; g.gain.value = 0.05;
         o.connect(g); g.connect(audioCtx.destination); o.start(); o.stop(audioCtx.currentTime + d);
     }
-    const speak = (t) => {
-        const u = new SpeechSynthesisUtterance(t); u.lang = 'en-US'; u.rate = 1;
-        window.speechSynthesis.speak(u);
-    };
 
-    function login() {
-        if(document.getElementById('pass').value === "aungphyo529") {
-            document.getElementById('auth').style.display='none';
-            document.getElementById('main-menu').style.display='flex';
-        } else alert("Wrong Password!");
-    }
+    function login() { if(document.getElementById('pass').value === "aungphyo529") { document.getElementById('auth').style.display='none'; document.getElementById('main-menu').style.display='flex'; } }
 
-    // --- စာပိုဒ်ရှည်ကြီးများ ၁၅၀ ---
-    const longTexts = [
-        "ကကြီး ကလေး ငို၊ ကိုကို ချော့လို့ နို့စို့စို့။ ခကွေး ကွေးကွေး၊ ခွေးကလေးကို ကျွေးကျွေး။ ဂငယ် ငယ်ငယ်၊ ငါးကလေး ဖမ်းမယ်။ ဃကြီး ကြီးမား၊ ဆင်ကြီး သွား။ င ကလေး ငြိမ်ငြိမ်၊ အိမ်မှာ ထိုင်။ စလုံး လုံးလုံး၊ ထမင်းလုံးကို စား။ ဆလိမ် လိမ်လိမ်၊ ကြိုးကလေးကို လိမ်။ ဇကွဲ ကွဲကွဲ၊ အိုးကလေး ကွဲ။ ဈမျဉ်းဆွဲ ဆွဲ၊ စာကြောင်း ဆွဲ။ ညလေး လေးလေး၊ ကလေးငယ် လေး။ ဋသန်လျင်းချိတ် ဌဝမ်းဘဲ ဍရင်ကောက် ဎရေမှုတ် ဏကြီး တဝမ်းပူ ထဆင်ထူး ဒထွေး ဓအောက်ခြိုက် နငယ် ပစောက် ဖဦးထုပ် ဗထက်ခြိုက် ဘကုန်း မငယ် ယပက်လက် ရကောက် လငယ် ဝလုံး သငယ် ဟကြီး ဠကြီး အ။",
-        "အနော်ရထာမင်းကြီးသည် ပုဂံနိုင်ငံတော်ကို သက္ကရာဇ် ၄၀၆ ခုနှစ်တွင် စတင်တည်ထောင်ခဲ့ပြီး ဗုဒ္ဓဘာသာကို မြန်မာနိုင်ငံတစ်ဝန်း ထွန်းကားပြန့်ပွားအောင် ဆောင်ရွက်ခဲ့သည်။ ကျန်စစ်သားမင်းသည် ထီးလိုမင်းလို စေတီတော်နှင့် အာနန္ဒာစေတီတော်မြတ်ကြီးကို တည်ထားကိုးကွယ်ခဲ့သည်။ ဘုရင့်နောင်ကျော်ထင်နော်ရထာသည် ဒုတိယမြန်မာနိုင်ငံတော်ကြီးကို ဟံသာဝတီနေပြည်တော်တွင် အခြေစိုက်ကာ အရှေ့တောင်အာရှတခွင် စည်းလုံးတည်ထောင်နိုင်ခဲ့သည်။ အလောင်းမင်းတရားကြီးသည် ကုန်းဘောင်မင်းဆက်ကို ရတနာသိင်္ခကုန်းဘောင်နေပြည်တော်မှ စတင်ခဲ့သည်။",
-        "ကမ္ဘာမကျေ မြန်မာပြည် တို့ဘိုးဘွား အမွေစစ်မို့ ချစ်မြတ်နိုးပေ။ ပြည်ထောင်စုကို အသက်ပေးလို့ တို့ကာကွယ်မလေ တို့မြေ တို့ရေ တို့ချစ်တဲ့ မြေ။ ပြည်ထောင်စု အကျိုးကို ရှေးရှုလို့ တို့တွေ သွေးစည်းကြပါစို့။ အောင်ဆန်းဇာနည် ဗိုလ်ချုပ်အောင်ဆန်းဇာနည်။ သက်စွန့်ကြိုးပမ်း ဆောင်ရွက်ခဲ့လို့ လွတ်လပ်ရေး ရပြီ။ တို့ဗိုလ်ချုပ်လို လူတော် လူကောင်း ဖြစ်အောင် ကြိုးစားစို့။ မြန်မာပြည်ကြီး ထာဝရ ငြိမ်းချမ်းသာယာပါစေ။"
+    // --- အခန်း ၁၅၀ မတူညီသော စာသားများ ---
+    const rawData = [
+        "ကကြီး ခကွေး ဂငယ် ဃကြီး င စလုံး ဆလိမ် ဇကွဲ ဈမျဉ်းဆွဲ ညလေး ဋသန်လျင်းချိတ် ဌဝမ်းဘဲ ဍရင်ကောက် ဎရေမှုတ် ဏကြီး တဝမ်းပူ ထဆင်ထူး ဒထွေး ဓအောက်ခြိုက် နငယ် ပစောက် ဖဦးထုပ် ဗထက်ခြိုက် ဘကုန်း မငယ် ယပက်လက် ရကောက် လငယ် ဝလုံး သငယ် ဟကြီး ဠကြီး အ။",
+        "ပုဂံခေတ် အနော်ရထာမင်းတရားကြီးသည် ပထမမြန်မာနိုင်ငံတော်ကို သက္ကရာဇ် ၄၀၆ ခုနှစ်တွင် တည်ထောင်ခဲ့သည်။ ဗုဒ္ဓဘာသာ ထွန်းကားပြန့်ပွားစေရန် သထုံမှ ပိဋကတ်တော်များကို ပင့်ဆောင်ခဲ့သည်။",
+        "ဘုရင့်နောင်ကျော်ထင်နော်ရထာသည် ဒုတိယမြန်မာနိုင်ငံတော်ကြီးကို ဟံသာဝတီတွင် အခြေစိုက်ကာ စည်းလုံးခဲ့သည်။ အလောင်းမင်းတရားကြီးသည် ကုန်းဘောင်မင်းဆက်ကို ရတနာသိင်္ခမှ စတင်ခဲ့သည်။",
+        "ဗိုလ်ချုပ်အောင်ဆန်းသည် မြန်မာ့လွတ်လပ်ရေးဖခင်ဖြစ်ပြီး ရဲဘော်သုံးကျိပ်နှင့်အတူ ဖက်ဆစ်ဂျပန်နှင့် နယ်ချဲ့အင်္ဂလိပ်တို့ကို တိုက်ထုတ်ကာ လွတ်လပ်ရေးကို အရယူပေးခဲ့သည်။",
+        "ကမ္ဘာမကျေ မြန်မာပြည် တို့ဘိုးဘွား အမွေစစ်မို့ ချစ်မြတ်နိုးပေ။ ပြည်ထောင်စုကို အသက်ပေးလို့ တို့ကာကွယ်မလေ တို့မြေ တို့ရေ တို့ချစ်တဲ့ မြေ။",
+        "ဧရာဝတီမြစ်သည် မြန်မာနိုင်ငံ၏ အသက်သွေးကြောဖြစ်ပြီး မြောက်မှတောင်သို့ ၁၃၂၀ မိုင်ခန့် ရှည်လျားစွာ စီးဆင်းလျက်ရှိသည်။"
     ];
 
     const lessonData = [];
     for(let i=1; i<=150; i++) {
-        let content = i <= 50 ? longTexts[0] : i <= 100 ? longTexts[1] : longTexts[2];
-        lessonData.push({ title: `အခန်း ${i}`, text: content });
+        let text = rawData[i % rawData.length] + ` (လေ့ကျင့်ခန်း အမှတ်စဉ် - ${i} ကို ကျွမ်းကျင်စွာ ရိုက်နှိပ်ပါ။)`;
+        lessonData.push({ title: `အခန်း ${i}`, text: text });
     }
 
-    const layout = [
-        [{n:'၁',s:'!'},{n:'၂',s:'@'},{n:'၃',s:'#'},{n:'၄',s:'$'},{n:'၅',s:'%'},{n:'၆',s:'^'},{n:'၇',s:'&'},{n:'၈',s:'*'},{n:'၉',s:'('},{n:'၀',s:')'},{n:'Bksp',w:true}],
-        [{n:'Tab',w:true},{n:'ဆ',s:'ဍ'},{n:'တ',s:'ဋ'},{n:'န',s:'ဏ'},{n:'မ',s:'ဣ'},{n:'အ',s:'ဤ'},{n:'ပ',s:'ဥ'},{n:'က',s:'ဦ'},{n:'င',s:'ဧ'},{n:'သ',s:'သြ'},{n:'စ',s:'၌'}],
-        [{n:'Caps',w:true},{n:'ေ',s:'ဗ'},{n:'ှ',s:'ှ'},{n:'ိ',s:'ီ'},{n:'်',s:'်'},{n:'ါ',s:'ာ'},{n:'့',s:'့'},{n:'ြ',s:'ွ'},{n:'ု',s:'ူ'},{n:'Enter',w:true}],
-        [{n:'Shift',w:true},{n:'ဖ',s:'ဃ'},{n:'ထ',s:'ဌ'},{n:'ခ',s:'ခြ'},{n:'လ',s:'ဠ'},{n:'ဘ',s:'ဘ'},{n:'ည',s:'ည'},{n:'ာ',s:'ါ'},{n:'Shift',w:true}],
-        [{n:' ', sp:true}]
+    const kbLayout = [
+        [{n:'`',s:'~'},{n:'၁',s:'!'},{n:'၂',s:'@'},{n:'၃',s:'#'},{n:'၄',s:'$'},{n:'၅',s:'%'},{n:'၆',s:'^'},{n:'၇',s:'&'},{n:'၈',s:'*'},{n:'၉',s:'('},{n:'၀',s:')'},{n:'-',s:'_'},{n:'=',s:'+'},{n:'Bksp',w:'extra-wide'}],
+        [{n:'Tab',w:'wide'},{n:'ဆ',s:'ဍ'},{n:'တ',s:'ဋ'},{n:'န',s:'ဏ'},{n:'မ',s:'ဣ'},{n:'အ',s:'ဤ'},{n:'ပ',s:'ဥ'},{n:'က',s:'ဦ'},{n:'င',s:'ဧ'},{n:'သ',s:'သြ'},{n:'စ',s:'၌'},{n:'[',s:'{'},{n:']',s:'}'},{n:'\\',s:'|'}],
+        [{n:'Caps',w:'extra-wide'},{n:'ေ',s:'ဗ'},{n:'ှ',s:'ှ'},{n:'ိ',s:'ီ'},{n:'်',s:'်'},{n:'ါ',s:'ာ'},{n:'့',s:'့'},{n:'ြ',s:'ွ'},{n:'ု',s:'ူ'},{n:'ူ',s:'း'},{n:';',s:':'},{n:"'",s:'"'},{n:'Enter',w:'extra-wide'}],
+        [{n:'Shift',w:'extra-wide'},{n:'ဖ',s:'ဃ'},{n:'ထ',s:'ဌ'},{n:'ခ',s:'ခြ'},{n:'လ',s:'ဠ'},{n:'ဘ',s:'ဘ'},{n:'ည',s:'ည'},{n:'ာ',s:'ါ'},{n:',',s:'<'},{n:'.',s:'>'},{n:'/',s:'?'},{n:'Shift',w:'extra-wide'}],
+        [{n:'Ctrl',w:'wide'},{n:'Win'},{n:'Alt'},{n:' ', sp:true},{n:'Alt'},{n:'Win'},{n:'Menu'},{n:'Ctrl',w:'wide'}]
     ];
 
-    let mode = 'practice', curL = 0, timerObj = null, timeRemain = 60;
+    let curL = 0, timerObj = null, timeRemain = 60;
 
     function setMode(m) {
-        mode = m; document.getElementById('main-menu').style.display = 'none';
-        if(m === 'battle') {
-            document.getElementById('p-in').style.display = 'none';
-            document.getElementById('battle-ui').style.display = 'flex';
-            document.getElementById('lesson-nav').style.display = 'none';
-        }
-        init();
-    }
-
-    function init() {
+        document.getElementById('main-menu').style.display = 'none';
+        const kbBody = document.getElementById('main-kb-rows');
+        kbLayout.forEach(r => {
+            const rowDiv = document.createElement('div'); rowDiv.className = 'row';
+            r.forEach(key => {
+                const kDiv = document.createElement('div');
+                kDiv.className = `k ${key.w || ''} ${key.sp?'space':''}`;
+                kDiv.dataset.n = key.n; kDiv.dataset.s = key.s;
+                kDiv.innerHTML = `${key.s?`<span class="sh">${key.s}</span>`:''}${key.n}`;
+                rowDiv.appendChild(kDiv);
+            });
+            kbBody.appendChild(rowDiv);
+        });
+        
         const nav = document.getElementById('lesson-nav');
         lessonData.forEach((l, i) => {
-            const b = document.createElement('div');
-            b.className='lesson-btn'; b.style = "padding:10px; background:#334155; margin-bottom:5px; cursor:pointer; border-radius:5px; font-size:13px;";
+            const b = document.createElement('div'); b.className='lesson-btn';
+            b.style="padding:8px; background:#334155; margin-bottom:5px; cursor:pointer; border-radius:5px; font-size:12px;";
             b.innerText = l.title; b.onclick = () => loadL(i); nav.appendChild(b);
-        });
-        const kb = document.getElementById('kb-engine');
-        layout.forEach(r => {
-            const d = document.createElement('div'); d.className='row';
-            r.forEach(k => {
-                const kd = document.createElement('div'); kd.className=`k ${k.w?'wide':''} ${k.sp?'space':''}`;
-                kd.dataset.n = k.n || k; kd.innerHTML = `${k.s?`<span class="sh">${k.s}</span>`:''}${k.n || k}`; d.appendChild(kd);
-            });
-            kb.appendChild(d);
         });
         loadL(0);
     }
@@ -179,52 +163,31 @@
         clearInterval(timerObj); timerObj = null;
         timeRemain = parseInt(document.getElementById('time-limit').value);
         document.getElementById('timer').innerText = timeRemain > 99999 ? "∞" : timeRemain;
-        document.querySelectorAll('input.field').forEach(i => i.value = '');
+        document.getElementById('p-in').value = '';
     }
 
     function highlight(c) {
         document.querySelectorAll('.k').forEach(k => k.classList.remove('active'));
-        const t = [...document.querySelectorAll('.k')].find(k => k.dataset.n === c || k.dataset.s === c);
-        if(t) t.classList.add('active');
+        const target = [...document.querySelectorAll('.k')].find(k => k.dataset.n === c || k.dataset.s === c);
+        if(target) target.classList.add('active');
     }
 
-    function finish(winner) {
-        clearInterval(timerObj);
-        document.getElementById('res-modal').style.display = 'flex';
-        if(mode === 'battle') {
-            document.getElementById('win-name').innerText = winner + " WINS! 🏆";
-            speak("Congratulations " + winner + "! You are the champion today. Better luck next time for the loser.");
-        } else {
-            document.getElementById('win-name').innerText = "CHAPTER DONE! ✅";
-            speak("Excellent work! You have finished the long paragraph perfectly.");
-        }
-    }
-
-    function handleInput(e, pNum) {
+    document.getElementById('p-in').addEventListener('input', (e) => {
         if(!timerObj && timeRemain > 0) {
             timerObj = setInterval(() => {
-                timeRemain--; 
-                document.getElementById('timer').innerText = timeRemain > 99999 ? "∞" : timeRemain;
-                if(timeRemain <= 0) finish(parseInt(document.getElementById('p1-wpm').innerText) > parseInt(document.getElementById('p2-wpm').innerText) ? "Player 1" : "Player 2");
+                timeRemain--; document.getElementById('timer').innerText = timeRemain > 99999 ? "∞" : timeRemain;
+                if(timeRemain <= 0) { clearInterval(timerObj); document.getElementById('res-modal').style.display='flex'; }
             }, 1000);
         }
         const v = e.target.value, txt = lessonData[curL].text;
-        const wpm = Math.round((v.length/5)/((parseInt(document.getElementById('time-limit').value)-timeRemain)/60)) || 0;
-        if(pNum) document.getElementById(`p${pNum}-wpm`).innerText = wpm;
-        else document.getElementById('wpm-display').innerText = wpm;
-
         if(v.length > 0) {
             if(v[v.length-1] === txt[v.length-1]) playSnd(600, 'sine', 0.05); else playSnd(150, 'square', 0.1);
         }
         const sps = document.getElementById('text-screen').querySelectorAll('span');
         sps.forEach((s,i) => s.className = (v[i]==null)?(i===v.length?'curr':''):(v[i]===s.innerText?'ok':'err'));
         highlight(txt[v.length] || '');
-        if(v === txt) finish(pNum === 1 ? "Player 1" : "Player 2");
-    }
-
-    document.getElementById('p-in').addEventListener('input', (e) => handleInput(e));
-    document.getElementById('p1-in').addEventListener('input', (e) => handleInput(e, 1));
-    document.getElementById('p2-in').addEventListener('input', (e) => handleInput(e, 2));
+        if(v === txt) { clearInterval(timerObj); document.getElementById('res-modal').style.display='flex'; }
+    });
 </script>
 </body>
-</html>
+</html
